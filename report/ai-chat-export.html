@@ -677,4 +677,54 @@ If the examiner asks for a change during the viva, run `git checkout -b viva` fi
 <div class="row tool">⚙ Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/g1-graph-period-vs-mass.png</div>
 <div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:31 IST</div>The graph switch works: 100 g, 300 g and 500 g all sit at 1.42 s, a flat line that shows mass doesn&#x27;t matter. I&#x27;ll add it to the report, regenerate the PDF and export, and commit.</div>
 <div class="row tool">⚙ Bash: Update report for graph switch, regenerate PDF and export, commit</div>
+<div class="row tool">⚙ Bash: Add graph switch to viva notes</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:31 IST</div>The graph only plotted length because length is the one variable that changes the period, and it was built to show that curve. Mass and angle are worth plotting too, because a flat line shows &quot;no effect&quot; at a glance. So I added a **Length | Mass | Angle** switch to the graph.
+
+I tested it on the live site. With 100 g, 300 g and 500 g, all three points sit at 1.42 s: a flat line, which is visual evidence against &quot;heavier swings faster&quot; (M1). For length the points rise and bend, because the period grows more slowly than the length. Each view has a one-line &quot;How to read it&quot; hint, without giving away the answer. The points glide into place for about half a second when you switch axes.
+
+The change is live and committed (19:31). The report now covers the graph in D3 and D7 and has a screenshot, and the chat export and viva notes are updated.
+
+**It&#x27;s 19:31. Please stop changes now and submit before 19:55.**
+1. Disclose your card in the Moodle Excel sheet if you haven&#x27;t (P5 / P5-T1 / L2 / C4 / 23B0745), and take a screenshot of the card.
+2. Put the report&#x27;s AI-use reflection in your own words.
+3. At about 19:50, run `~/Desktop/ET617/update-chat-export.sh`.
+4. Upload to Moodle:
+   - Live app URL: https://et617-23b0745.vercel.app
+   - Repo: https://github.com/vishalpatel04/et617-endsem-23B0745
+   - Report: `report/ET617-EndSem-23B0745-Report.pdf`
+   - AI chat files: `report/ai-chat-export.pdf` and `report/ai-chat-summary.pdf`
+   - Your exam-card screenshot</div>
+<div class="row user"><div class="who">You (student) · 18 Nov 19:35 IST</div>what is this?
+[1 screenshot(s) attached]</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:35 IST</div>It&#x27;s the **speed meter**, under the pendulum. It explains *why* a bigger pull doesn&#x27;t change the time.
+
+- **&quot;Speed now&quot;** is how fast the bob is moving at this moment. It shows **0.00 m/s** because nothing is running and the bob is held at its starting point. Press **Run 10 swings** and the bar fills as the bob speeds up through the bottom of the swing and empties at each end.
+- **&quot;Dashed line: the path&quot;** refers to the dashed curve drawn on the pendulum: the arc the bob travels.
+- **&quot;One full swing travels about 70 cm&quot;** is the distance for one complete there-and-back swing. With a 50 cm string pulled back 20°, that&#x27;s 4 × 50 cm × 0.35 ≈ 70 cm.
+- **&quot;Top speed 0.77 m/s&quot;** is the fastest the bob goes, at the bottom of the swing.
+
+**Why it&#x27;s there (misconception M2, &quot;a bigger pull takes longer&quot;):** compare two starting angles on the same 50 cm string.
+
+| Starting angle | Path per swing | Top speed | Period |
+|---|---|---|---|
+| 10° | 35 cm | 0.39 m/s | 1.42 s |
+| 20° | 70 cm | 0.77 m/s | 1.42 s |
+
+Doubling the angle doubles the distance but also doubles the speed, so the time for one swing stays the same.
+
+**What to say in the viva:** &quot;A bigger pull means a longer path, but the bob also moves faster. The two balance out, so the period stays the same. The speed meter lets the learner see both at once.&quot;
+
+It&#x27;s 19:32, so please go ahead with the Moodle submission.</div>
+<div class="row user"><div class="who">You (student) · 18 Nov 19:36 IST</div>now do the final check that are all thing working fine as i need to push this and submit all the requirements</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:36 IST</div>I&#x27;ll run the final pre-submission check: the repo, the live deployment, a full end-to-end test on the live app, and the submission files. First the repo, the deployment and the files.</div>
+<div class="row tool">⚙ Bash: Check repo, secrets, build, files, report, live deployment</div>
+<div class="row tool">⚙ mcp__plugin_playwright_playwright__browser_run_code_unsafe: </div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:38 IST</div>You&#x27;ve hit your 5-hour limit · resets 10:10pm (Asia/Calcutta)</div>
+<div class="row user"><div class="who">You (student) · 18 Nov 19:40 IST</div>do it again and check all things properly and the files report all the things the report formatting also give me the things which i must need to know before my viva begins</div>
+<div class="row tool">⚙ mcp__plugin_playwright_playwright__browser_run_code_unsafe: </div>
+<div class="row tool">⚙ Bash: Render every report PDF page to images for a format check</div>
+<div class="row tool">⚙ Read: /private/tmp/claude-501/-Users-vishalchandrapatel-Desktop-ET617/ad033cab-b892-4570-8539-58711f323dff/scratchpad/report-sheet.png</div>
+<div class="row tool">⚙ Bash: Fix two page breaks, regenerate report PDF and page images</div>
+<div class="row tool">⚙ Read: /private/tmp/claude-501/-Users-vishalchandrapatel-Desktop-ET617/ad033cab-b892-4570-8539-58711f323dff/scratchpad/report-sheet.png</div>
+<div class="row tool">⚙ Bash: Refresh export, commit, push and confirm final state</div>
 </body></html>
