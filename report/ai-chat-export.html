@@ -650,4 +650,31 @@ For the viva, use `~/Desktop/ET617/VIVA-PREP-23B0745.md`, which now also covers 
 <div class="row tool">⚙ Bash: Remove unused variable, rebuild, commit, push, deploy</div>
 <div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:25 IST</div>Deployed. Next I&#x27;ll test your exact case: a learner finishes, comes back, opens Experiment, and the clock should continue from the saved time.</div>
 <div class="row tool">⚙ mcp__plugin_playwright_playwright__browser_run_code_unsafe: </div>
+<div class="row tool">⚙ Bash: Refresh chat export, commit and push</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:25 IST</div>The clock now continues from the saved time when a learner comes back, even after &quot;Finish and save&quot;. It stops only while the learner is on the Wrap-up screen. I tested your exact case on the live site: Wrap-up showed &quot;Done in 02:00&quot;, and back in Experiment it read &quot;08:00 left&quot;, then &quot;07:57 left&quot; three seconds later. The fix is deployed and committed (19:25), and the chat export is refreshed. The report doesn&#x27;t need changing; it already says the clock stops at Wrap-up.
+
+**It&#x27;s 19:25. Please stop making changes now and submit:**
+1. Disclose your card in the Moodle Excel sheet if you haven&#x27;t (P5 / P5-T1 / L2 / C4 / 23B0745), and take a screenshot of the card.
+2. Read the report&#x27;s AI-use reflection and put it in your own words.
+3. At about 19:50, run `~/Desktop/ET617/update-chat-export.sh` so the export includes these last messages.
+4. Upload to Moodle before 19:55:
+   - Live app URL: https://et617-23b0745.vercel.app
+   - Repo: https://github.com/vishalpatel04/et617-endsem-23B0745
+   - Report: `report/ET617-EndSem-23B0745-Report.pdf`
+   - AI chat files: `report/ai-chat-export.pdf` and `report/ai-chat-summary.pdf`
+   - Your exam-card screenshot
+
+If the examiner asks for a change during the viva, run `git checkout -b viva` first and deploy with `vercel deploy`, never `--prod`.</div>
+<div class="row user"><div class="who">You (student) · 18 Nov 19:29 IST</div>why only period vs length plot
+[1 screenshot(s) attached]</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:29 IST</div>It was only length because length is the one variable that changes the period, so the graph was built to show its curve: the period grows, but more slowly than the length. You&#x27;re right, though. Plotting period against **mass** and **angle** is strong evidence too: those points form a **flat line**, which shows M1 and M2 are wrong at a glance. I&#x27;ll add a &quot;Plot period against: Length | Mass | Angle&quot; switch with a one-line reading hint. It&#x27;s a small, low-risk change.</div>
+<div class="row tool">⚙ Bash: Add graph axis switch, lint, build, commit, deploy</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:30 IST</div>Deployed at 19:30. Next I&#x27;ll test it: run mass trials, switch the graph to &quot;mass&quot;, and check that the flat line appears.</div>
+<div class="row tool">⚙ mcp__plugin_playwright_playwright__browser_run_code_unsafe: </div>
+<div class="row tool">⚙ Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/g1-graph-period-vs-mass.png</div>
+<div class="row tool">⚙ mcp__plugin_playwright_playwright__browser_run_code_unsafe: </div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:31 IST</div>Confirmed: it was the animation. After it settles, the points sit evenly spaced at 100, 300 and 500 g. I&#x27;ll check the final screenshot.</div>
+<div class="row tool">⚙ Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/g1-graph-period-vs-mass.png</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:31 IST</div>The graph switch works: 100 g, 300 g and 500 g all sit at 1.42 s, a flat line that shows mass doesn&#x27;t matter. I&#x27;ll add it to the report, regenerate the PDF and export, and commit.</div>
+<div class="row tool">⚙ Bash: Update report for graph switch, regenerate PDF and export, commit</div>
 </body></html>
