@@ -37,9 +37,9 @@ export default function App() {
 
   // Session clock for constraint C4: counts only while this learner's turn is open and visible.
   const learnerId = learner?.id
-  const finished = Boolean(learner?.completedAt)
-  // The learning sequence ends at Wrap-up, so the clock stops there.
-  const clockStopped = finished || learner?.step === 'summary'
+  // The clock stops only while the learner is on Wrap-up. If she comes back later
+  // (even after finishing) and works on another step, it continues from the saved time.
+  const clockStopped = learner?.step === 'summary'
   useEffect(() => {
     if (view !== 'learn' || !learnerId || clockStopped) return undefined
     const timer = setInterval(() => {
