@@ -489,4 +489,73 @@ I&#x27;ve added this two-part plan to memory below. If you want a head start, I 
 <div class="row tool">⚙ Write: /Users/vishalchandrapatel/Desktop/ET617/VIVA-PREP-23B0745.md</div>
 <div class="row ai"><div class="who">Claude (AI) · 18 Nov 18:49 IST</div>Next, a one-command script that refreshes the chat export (HTML and PDF), so you can rerun it just before submitting and include the latest messages. I&#x27;ll run it once now.</div>
 <div class="row tool">⚙ Bash: Create chat-export refresh script, run it, commit and push</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 18:49 IST</div>Everything is committed, pushed and live (18:49). I&#x27;ll add a short note to memory so a new chat during the viva knows where everything is and that viva changes go on a separate branch.</div>
+<div class="row tool">⚙ Edit: /Users/vishalchandrapatel/.claude/projects/-Users-vishalchandrapatel-Desktop-ET617/memory/et617-exam-plan.md</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 18:49 IST</div>The app, report and AI chat files are done, committed and live as of 18:49. Before you submit, you need to do the items below, especially the card disclosure, which is overdue.
+
+**Card I chose: P5-T1-L2-C4** (inquiry-based virtual lab, simple pendulum, first-generation learner at an NGO centre with shared tablets, 10-minute sessions). The pendulum physics is exact, so the lab can&#x27;t give wrong data. The two misconceptions (&quot;a heavier bob swings faster&quot;, &quot;a bigger push takes longer&quot;) are easy to show and explain. The stopwatch, ruler, protractor, data table and graph match the rubric&#x27;s &quot;topic-specific tools&quot;. C4 fits shared tablets. It also differs from the example card (photosynthesis).
+
+## Exam checkpoints
+
+| Requirement | Status |
+|---|---|
+| Repo created after the exam started | ✅ |
+| DESIGN.md by 0:30 (18:30) | ✅ 18:27 |
+| First deployment by 1:00 (19:00) | ✅ 18:28 |
+| Commits every 30 min | ✅ 8 commits, 18:27–18:49 |
+| Live at et617-23b0745.vercel.app | ✅ https://et617-23b0745.vercel.app |
+| At least 5 connected screens, C4 visible, 23B0745 on every screen and on About | ✅ |
+| Both learner scenarios run on the live app, with screenshots in the report | ✅ |
+| Report: Identity card, D1–D8, AI-use log, in template order | ✅ 13-page PDF |
+| No API key committed | ✅ |
+
+I tested both learner paths on the live site. During testing I found and fixed one bug: the fair-test helper was comparing the wrong pair of trials.
+
+**The AI coach is running in fallback mode.** No API key is set, so the app uses a clearly labelled rule-based coach. The rules allow this, and the report explains it in D6. If you have an Anthropic key, add it in Vercel → **et617-23b0745** → Settings → Environment Variables as `ANTHROPIC_API_KEY`, then tell me. Never paste the key into this chat.
+
+## What only you can do
+
+1. **Disclose your card in the Moodle Excel sheet now:** 23B0745, P5, P5-T1, L2, C4. It was due by 18:10.
+2. **Take a screenshot of your exam card.** It&#x27;s on the Moodle checklist.
+3. **Read the report PDF, especially the &quot;AI-use log and reflection&quot; section, and put it in your own words.** I drafted it in first person. Keep only the claims that are true for you, for example &quot;What I checked myself&quot;.
+4. **Upload to Moodle:**
+   - Live app URL: `https://et617-23b0745.vercel.app`
+   - Repo link: `https://github.com/vishalpatel04/et617-endsem-23B0745`
+   - Report PDF: `et617-endsem-23B0745/report/ET617-EndSem-23B0745-Report.pdf`
+   - AI chat files: `report/ai-chat-export.pdf` (the full chat) and `report/ai-chat-summary.pdf` (the chat summary you asked for)
+   - Your exam-card screenshot
+5. **Just before submitting,** run `~/Desktop/ET617/update-chat-export.sh` so the chat export includes the latest messages. You can also ask me to run it and commit.
+
+## Viva (2:00–3:00)
+
+Open **`~/Desktop/ET617/VIVA-PREP-23B0745.md`**. It has:
+- a click-by-click script for the correct path and the misconception path
+- answers to likely &quot;why&quot; questions
+- a table showing which file to edit for each likely change request
+
+**Rule for the live change request:** the submitted app and repo are frozen. Run `git checkout -b viva` first, and deploy with `vercel deploy` (preview only), never `--prod`. I can make the change with you during the viva.</div>
+<div class="row user"><div class="who">You (student) · 18 Nov 19:01 IST</div>and can you add more features in to the app for the better understanding of this topic as for now it is looking too simple as of now i want you to add a more better learning feature to teach the students like increase the angle make then visualize in 3D type of things
+[1 screenshot(s) attached]</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:03 IST</div>Your screenshot shows two problems:
+- **&quot;yes it is&quot; got a vague reply.** &quot;Yes&quot; means &quot;a heavier bob does change the period&quot;, which is exactly misconception M1, so the coach should say so. I&#x27;ll teach it yes/no (plus *haan*/*nahi*).
+- **The lab feels too simple.** I&#x27;ll add three learning features, each tied to a misconception:
+  1. **3D view** of the pendulum with a stand, a floor shadow and a &quot;turn the view&quot; slider, as you asked. A dashed **swing path** and a live **speed bar** show *why* a bigger angle doesn&#x27;t change the time: the bob goes further but faster (this targets M2).
+  2. **&quot;Race two pendulums&quot;**: two pendulums swing side by side (light vs heavy, small vs big push, short vs long string). The learner predicts the winner first, then watches. The same period means they stay in step; a longer string falls behind. This makes M1 and M2 visible.
+  3. A **&quot;Where you see this&quot;** card (playground swing, pendulum clock) that links the idea to real life.
+
+It&#x27;s 18:5x. I&#x27;ll finish features by ~19:20, then update the report and screenshots, leaving enough margin before Moodle closes. First I&#x27;ll read the current pendulum file.</div>
+<div class="row tool">⚙ Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/components/Pendulum.jsx</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:04 IST</div>I&#x27;ll start with the content for the new features: race presets and the real-life examples.</div>
+<div class="row tool">⚙ Bash: Add race presets and real-life examples to content</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:04 IST</div>It&#x27;s 19:04, so about 25 minutes for the features. Writing the 3D scene and the race component now.</div>
+<div class="row tool">⚙ Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/components/Scene3D.jsx</div>
+<div class="row tool">⚙ Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/components/RacePendulums.jsx</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:05 IST</div>Next, wiring them in: the 2D/3D switch, swing path and speed bar on the pendulum; tabs in the lab; the yes/no fix in the coach; and the real-life card in Wrap-up.</div>
+<div class="row tool">⚙ Bash: Wire in 3D view, race tab, speed bar, coach fix, real-life card; lint and build</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:05 IST</div>Lint is clean and the build passes. I&#x27;ll commit and deploy, then test the new features in the browser.</div>
+<div class="row tool">⚙ Bash: Commit new features, push and deploy</div>
+<div class="row tool">⚙ mcp__plugin_playwright_playwright__browser_run_code_unsafe: </div>
+<div class="row tool">⚙ Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/e1-3d-view-running.png</div>
+<div class="row tool">⚙ Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/e4-race-length-result.png</div>
+<div class="row tool">⚙ Bash: Update report and summary, regenerate PDFs and export, commit</div>
 </body></html>
