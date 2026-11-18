@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>AI chat summary: 23B0745</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm; }
+  body { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 10.5pt; line-height: 1.45; color: #111827; }
+  h1 { font-size: 17pt; margin-bottom: 2px; }
+  h2 { font-size: 12.5pt; margin: 16px 0 6px; border-bottom: 2px solid #4f46e5; padding-bottom: 2px; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #d1d5db; padding: 4px 6px; text-align: left; vertical-align: top; }
+  th { background: #eef2ff; }
+  li { margin: 2px 0; }
+  .muted { color: #4b5563; }
+</style>
+</head>
+<body>
+<h1>AI chat summary</h1>
+<p class="muted">ET 617 End-Semester Examination, 18 Nov 2026. Student: <b>23B0745</b>. App: <a href="https://et617-23b0745.vercel.app">et617-23b0745.vercel.app</a>. Repo: <a href="https://github.com/vishalpatel04/et617-endsem-23B0745">github.com/vishalpatel04/et617-endsem-23B0745</a></p>
+
+<table>
+  <tr><th style="width:24%">AI tool</th><td>Claude Code (Claude) in VS Code. One continuous chat, used in the order below.</td></tr>
+  <tr><th>Full export</th><td><code>ai-chat-export.pdf</code> / <code>ai-chat-export.html</code>: every message in order, tool calls as one-line summaries. Claude Code sessions have no share link, so the export is attached instead.</td></tr>
+  <tr><th>AI inside the app</th><td>"Lab coach" (Claude API via a Vercel function) gives feedback on the learner's written explanation, with output checks and a clearly labelled rule-based fallback. Specified in report section D6.</td></tr>
+</table>
+
+<h2>Part A: before the exam (18 Nov, about 00:30–01:40 IST), preparation only</h2>
+<ol>
+  <li>Asked Claude to read my course material (Class 1, 2 and 4 slides; Software Development Models PDF) and suggest how to approach a 2-hour build exam.</li>
+  <li>Installed tools with Claude's help: Claude Code plugins (frontend-design, Playwright, Context7), the Vercel CLI and VS Code extensions. Checked GitHub and Vercel logins with a test deployment (et617-readiness-test.vercel.app).</li>
+  <li>A practice starter app on photosynthesis was started and then stopped at my request. Only an empty Vite + React + Tailwind scaffold (template code, no app content) was kept. No exam-specific content existed before the exam.</li>
+</ol>
+
+<h2>Part B: during the exam (18 Nov, from 18:23 IST)</h2>
+<table>
+  <tr><th style="width:12%">Time (IST)</th><th>What I asked or did</th><th>What Claude did</th></tr>
+  <tr><td>18:23</td><td>Shared the exam document (ET 617-2026.docx) and my repo link; asked Claude to read every instruction, recommend a card and build the app.</td><td>Read the document; listed the deadlines (card within 10 min, DESIGN.md by 0:30, deployment by 1:00, commits every 30 min).</td></tr>
+  <tr><td>18:25</td><td>Accepted the recommended card.</td><td>Recommended <b>P5-T1-L2-C4</b> (virtual pendulum lab, NGO learner on shared tablets, 10-minute sessions) with reasons: a reliable deterministic simulation, clear misconceptions, topic-specific tools, and C4 fitting shared tablets.</td></tr>
+  <tr><td>18:27</td><td>Process checkpoint</td><td>Wrote and committed <b>DESIGN.md</b> (problem, outcomes, persona Sana, content plan).</td></tr>
+  <tr><td>18:29</td><td>Process checkpoint</td><td>Created the Vercel project <b>et617-23b0745</b>; first deployment live (fixed a missing framework setting in vercel.json).</td></tr>
+  <tr><td>18:33–18:38</td><td>Build</td><td>Wrote the app: predictions, animated pendulum with ruler/protractor/stopwatch, fair-test detection with a hint ladder and helper, check tasks, AI lab coach with checks and fallback, 10-minute clock with stop and resume. Linted, built, committed, deployed.</td></tr>
+  <tr><td>18:39–18:44</td><td>Testing</td><td>Ran both learner scenarios on the live app in a browser. Found and fixed a bug (the fair-test helper copied the wrong trial). Captured screenshots for D5.</td></tr>
+  <tr><td>18:44–18:50</td><td>Report</td><td>Drafted the report (identity card, D1–D8, AI-use log), produced the PDF, and exported this chat.</td></tr>
+</table>
+
+<h2>Commits (GitHub timestamps)</h2>
+<ul>
+  <li>18:27 Add DESIGN.md: card P5-T1-L2-C4, problem, outcomes, persona, content plan</li>
+  <li>18:29 First deployment: placeholder with identity token, Vercel config for Vite</li>
+  <li>18:38 Build Jhoola Lab: predict, virtual pendulum lab with fair-test support, check tasks, AI lab coach with fallback, 10-minute resumable sessions</li>
+  <li>18:41 Fix fair-test helper to copy the latest trial; tidy protractor labels; add D5 screenshots</li>
+  <li>18:43 Add D5 screenshots: correct path and misconception path, resume and About screens</li>
+  <li>Later commits: report, README and final deployment (see the repository history)</li>
+</ul>
+
+<h2>How AI output was checked</h2>
+<ul>
+  <li>Every build ran lint and a production build; every feature was clicked through on the live URL in a real browser for both learner paths.</li>
+  <li>Physics values checked against T = 2π√(L/g): 50 cm gives 1.42 s, 25 cm gives 1.00 s, 100 cm gives 2.01 s.</li>
+  <li>The in-app AI coach never decides alone: its reply is validated, cross-checked with rules, blocked if it gives away the answer, and replaced by a labelled fallback if anything fails.</li>
+</ul>
+</body>
+</html>

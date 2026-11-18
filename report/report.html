@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ET 617 End-Sem Report: Jhoola Lab (23B0745)</title>
+<style>
+  @page { size: A4; margin: 16mm 14mm; }
+  body { font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 10.5pt; line-height: 1.45; color: #111827; }
+  h1 { font-size: 20pt; margin: 0 0 4px; }
+  h2 { font-size: 14pt; margin: 22px 0 6px; padding-bottom: 3px; border-bottom: 2px solid #4f46e5; break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 14px 0 4px; break-after: avoid; }
+  p { margin: 4px 0 8px; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 10px; break-inside: auto; }
+  th, td { border: 1px solid #d1d5db; padding: 4px 6px; vertical-align: top; text-align: left; }
+  th { background: #eef2ff; }
+  tr { break-inside: avoid; }
+  code, pre { font-family: Menlo, Consolas, monospace; font-size: 8.5pt; }
+  pre { background: #f3f4f6; padding: 8px; white-space: pre-wrap; border-radius: 4px; break-inside: avoid; }
+  .muted { color: #4b5563; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  figure { margin: 6px 0; break-inside: avoid; }
+  figure img { width: 100%; border: 1px solid #d1d5db; }
+  figcaption { font-size: 8.5pt; color: #374151; margin-top: 2px; }
+  .page-break { break-before: page; }
+  ul, ol { margin: 4px 0 8px; padding-left: 20px; }
+  li { margin: 2px 0; }
+</style>
+</head>
+<body>
+
+<h1>Jhoola Lab: a 10-minute virtual pendulum lab</h1>
+<p class="muted">ET 617 End-Semester Examination, 18 Nov 2026. Report template order: Identity card, D1–D8, AI-use log and reflection.</p>
+
+<h2>Identity card</h2>
+<table>
+  <tr><th style="width:28%">Identity token (roll no.)</th><td><b>23B0745</b></td></tr>
+  <tr><th>P: Problem</th><td>P5 Inquiry-based virtual laboratory</td></tr>
+  <tr><th>T: Topic</th><td>P5-T1 Simple pendulum: length, mass, amplitude vs period (Class 9–11)</td></tr>
+  <tr><th>L: Learner context</th><td>L2 First-generation learner in an urban low-income settlement, attends an NGO after-school centre with shared tablets</td></tr>
+  <tr><th>C: Design constraint</th><td>C4 10-minute sessions: one complete learning sequence fits in 10 minutes; the learner can stop and resume where they left off</td></tr>
+  <tr><th>Live app</th><td><a href="https://et617-23b0745.vercel.app">https://et617-23b0745.vercel.app</a></td></tr>
+  <tr><th>GitHub repository</th><td><a href="https://github.com/vishalpatel04/et617-endsem-23B0745">https://github.com/vishalpatel04/et617-endsem-23B0745</a></td></tr>
+  <tr><th>Built with</th><td>Vite React template, Tailwind CSS, Recharts (graph), Lucide icons, Anthropic TypeScript SDK (AI coach). No code reused from my course project.</td></tr>
+</table>
+
+<h2>D1 Educational problem</h2>
+<p>Class 9 learners at NGO after-school centres usually meet the pendulum as a formula to memorise (T = 2π√(L/g)) and never test it themselves. Many believe that a heavier bob or a bigger push changes how long one swing takes, and few have practised a fair test that changes only one thing at a time. Each child gets the centre's shared tablet for a short turn, so learning has to happen in short sessions that can be paused and picked up later. Jhoola Lab ("jhoola" means swing) lets a learner predict, run timed swing experiments by changing length, mass and angle, and revise her idea from her own data, all within one 10-minute session.</p>
+<h3>Measurable learning outcomes</h3>
+<ol>
+  <li><b>Predict</b> whether changing the length, the mass of the bob or the starting angle changes the period of a simple pendulum, and <b>check</b> the prediction with an experiment.</li>
+  <li><b>Design</b> a fair test that changes only one variable, and <b>explain</b> why the other two must stay the same.</li>
+  <li><b>Explain</b> from her own data why a longer string gives a longer period, and <b>calculate</b> that a string four times shorter halves the period (100 cm: 2.0 s, 25 cm: 1.0 s).</li>
+</ol>
+<h3>Context of use</h3>
+<p><b>Where:</b> an NGO after-school centre ("Prerna") in an urban settlement in Mumbai. <b>When:</b> 5–7 pm, one 10-minute turn per child on a shared tablet, two or three evenings a week. <b>Device:</b> a shared 10-inch Android tablet with Chrome on the centre's Wi-Fi; a facilitator is in the room.</p>
+
+<h2>D2 Learner persona</h2>
+<table>
+  <tr><th style="width:28%">Name, age</th><td><b>Sana Shaikh, 14</b>, Class 9, municipal secondary school (semi-English medium)</td></tr>
+  <tr><th>Background</th><td>First in her family to reach Class 9. Her father drives an auto-rickshaw; her mother does tailoring from home. She attends Prerna centre three evenings a week.</td></tr>
+  <tr><th>Prior knowledge of prerequisites</th><td>Can measure length with a ruler in cm, read a stopwatch and divide by 10. Knows a swing goes "back and forth" but not the word <i>period</i>. Has not met square roots in physics and has never planned an experiment herself.</td></tr>
+  <tr><th>Misconception M1</th><td><b>"A heavier bob swings faster"</b>: more mass means a shorter period.</td></tr>
+  <tr><th>Misconception M2</th><td><b>"A bigger push (larger angle) makes each swing take longer"</b>: amplitude changes the period.</td></tr>
+  <tr><th>Learning gap</th><td>Changes several things at once when experimenting, so she cannot tell which change caused the result.</td></tr>
+  <tr><th>Device and time</th><td>Shared tablet, one 10-minute turn, often cut short when the next child's turn comes.</td></tr>
+  <tr><th>Language</th><td>Hindi at home, science in simple English. Key terms help when given with a Hindi gloss (period = <i>ek poore jhoole ka samay</i>).</td></tr>
+  <tr><th>Motivation</th><td>Wants to become a nurse. Enjoys hands-on activities and small wins; loses confidence when a page starts with a formula; encouraged by the facilitator's praise.</td></tr>
+</table>
+
+<h2>D3 Educational content</h2>
+<h3>Concept explanation (Start screen, conversational, key terms highlighted)</h3>
+<p>"Hi Sana! Let's find out what decides how long one swing takes. <b>First,</b> the <b>period</b> is the time for one full swing, there and back (<i>ek poore jhoole ka samay</i>). <b>Second,</b> timing one swing is hard because our hand reacts late, so we <b>time 10 swings and divide by 10</b>. <b>Third,</b> a <b>fair test</b> changes only one thing at a time: the length, the mass or the angle. We keep the other two the same." A glossary gives each term with its Hindi gloss (bob = <i>latakta hua vazan</i>, angle = <i>kitna kheencha</i>, fair test = <i>sahi tulna</i>).</p>
+<h3>One complete learning activity (10 minutes)</h3>
+<table>
+  <tr><th>Step</th><th>Time</th><th>What the learner does</th></tr>
+  <tr><td>1 Start</td><td>1 min</td><td>Picks her name on the shared tablet, reads the concept explanation and the 10-minute plan.</td></tr>
+  <tr><td>2 Predict</td><td>1.5 min</td><td>Three prediction questions (mass, angle, length). These also act as a diagnostic.</td></tr>
+  <tr><td>3 Experiment</td><td>5 min</td><td>Virtual pendulum with sliders (length 20–100 cm, mass 50–500 g, angle 5–20°), a stopwatch timing 10 swings, ruler, protractor, data table and period-vs-length graph. Goal: one fair test each for mass, angle and length.</td></tr>
+  <tr><td>4 Check</td><td>2 min</td><td>Numeric task, fair-test spotting task, written explanation with AI coach feedback.</td></tr>
+  <tr><td>5 Wrap-up</td><td>0.5 min</td><td>"Your ideas vs your data" table and the three outcomes ticked from evidence.</td></tr>
+</table>
+<h3>Tasks (7 tasks in 4 formats) with model answers</h3>
+<table>
+  <tr><th>#</th><th>Format</th><th>Task (exact text)</th><th>Model answer</th></tr>
+  <tr><td>1</td><td>MCQ (predict)</td><td>"Sana ties a heavier stone to the same string and pulls it back the same amount. One full swing will take… less time / more time / the same time."</td><td>The same time.</td></tr>
+  <tr><td>2</td><td>MCQ (predict)</td><td>"Now she keeps the same stone and string, but pulls it further back before letting go. One full swing will take…"</td><td>The same time (small angles).</td></tr>
+  <tr><td>3</td><td>MCQ (predict)</td><td>"Then she uses a longer string with the same stone. One full swing will take…"</td><td>More time.</td></tr>
+  <tr><td>4</td><td>Simulation experiment</td><td>Run trials; for each of mass, angle and length, make two trials that differ in only that variable.</td><td>Example data: 50 cm, 100 g, 10° gives 1.42 s; 300 g gives 1.43 s (same); 20° gives 1.41 s (same); 25 cm gives 1.00 s (shorter).</td></tr>
+  <tr><td>5</td><td>Numeric entry</td><td>"A 100 cm pendulum has a period of about 2.0 s. What is the period of a 25 cm pendulum?"</td><td>About 1.0 s: 4 times shorter string, 2 times shorter period (√4 = 2).</td></tr>
+  <tr><td>6</td><td>MCQ (fair-test spotting)</td><td>"Raju wants to test whether mass changes the period. Which pair of trials is a fair test?" (four trial pairs)</td><td>C: 50 cm, 100 g, 10° → 50 cm, 300 g, 10°.</td></tr>
+  <tr><td>7</td><td>Short written explanation (AI coach)</td><td>"Use your own results: does a heavier bob change the period? Explain in 1–2 sentences."</td><td>"No. When I kept the length (50 cm) and the angle (10°) the same and changed only the mass from 100 g to 300 g, the period stayed about 1.42 s both times."</td></tr>
+</table>
+<h3>Feedback: correct response and each misconception (exact app text)</h3>
+<table>
+  <tr><th>Where</th><th>Correct response</th><th>M1 (heavier swings faster)</th><th>M2 (bigger angle takes longer)</th></tr>
+  <tr><td>Lab, after a fair test</td><td>"This matches your prediction. Well done, scientist!"</td><td>"Your prediction was different. Many of us think a heavier stone swings faster, so this surprises a lot of people! Your fair test shows the period hardly changed when only the mass changed. What do you think now?" [My data changed my idea] [I want to test again]</td><td>"Your prediction was different. A bigger pull makes the stone move faster, but it also has further to travel. The two balance out, so the time for one swing stays about the same. What do you think now?"</td></tr>
+  <tr><td>Task 7 coach (fallback replies)</td><td>"Well done! You changed only the mass and used your own numbers to show the period stayed about the same. That is how scientists argue from evidence."</td><td>"Many of us feel a heavier stone should swing faster. Let's check your table: find two trials where ONLY the mass is different. What happened to the period?"</td><td>"Your answer is about the angle, but this question is about mass. Let's find two trials where ONLY the mass is different. What happened to the period?"</td></tr>
+  <tr><td>Task 5 numeric</td><td>"Yes! The string is 4 times shorter, and the period is 2 times shorter: 2.0 s becomes 1.0 s."</td><td colspan="2">Learning gap (answer 0.5 s): "You divided 2.0 by 4. Many of us expect the period to shrink as much as the length, but it shrinks less: 4 times shorter gives only 2 times shorter. Try 100 cm and 25 cm in the lab." plus a button that reopens the lab.</td></tr>
+  <tr><td>Task 6 fair pair</td><td>"Correct. Only the mass changes. Length and angle stay the same, so any change in the period must come from the mass."</td><td colspan="2">Option A: "Not fair: the length and the mass both change, so we cannot tell which one changed the period." Option D: "Not fair: the mass and the angle both change. Keep the angle the same."</td></tr>
+</table>
+
+<h2>D4 Working application</h2>
+<p><b>URL:</b> <a href="https://et617-23b0745.vercel.app">https://et617-23b0745.vercel.app</a>. The identity token <b>23B0745</b> is in the footer of every screen and on the About screen.</p>
+<h3>Screen map</h3>
+<table>
+  <tr><th>Screen / state</th><th>Learner input</th><th>System output and transition</th></tr>
+  <tr><td>1 Start (shared tablet)</td><td>Pick own name or type a new name</td><td>Shows each learner's saved step and time used; opens Intro, or resumes at the saved step with a "Welcome back" banner</td></tr>
+  <tr><td>2 Intro and plan</td><td>Start button</td><td>Concept explanation, Hindi glossary, 10-minute plan → Predict</td></tr>
+  <tr><td>3 Predict</td><td>3 MCQ predictions</td><td>No right/wrong yet ("we will test them"); predictions set the experiment order → Lab</td></tr>
+  <tr><td>4 Lab: first / repeat trial</td><td>Sliders, speed, "Run 10 swings"</td><td>Animated pendulum, stopwatch, swing counter; trial added to table and graph</td></tr>
+  <tr><td>4a Lab: fair test</td><td>Change one variable, run</td><td>"Fair test of the …", period comparison, prediction match or misconception feedback, revise buttons</td></tr>
+  <tr><td>4b Lab: unfair test</td><td>Change two or more variables, run</td><td>"Not a fair test yet"; hint ladder 1–3; fair-test helper locks other sliders</td></tr>
+  <tr><td>5 Check</td><td>Number, MCQ, written explanation</td><td>Immediate feedback per task; AI coach reply with source label; links back to the lab when a misconception or gap is detected → Summary</td></tr>
+  <tr><td>6 Wrap-up</td><td>"Finish and save my turn"</td><td>Ideas-vs-data table, outcomes ticked from evidence, time used → back to Start with a saved message</td></tr>
+  <tr><td>7 About</td><td>Footer link (every screen)</td><td>Identity token, exam card, AI disclosure, learning-log CSV download</td></tr>
+</table>
+<h3>How constraint C4 (10-minute sessions) is visible</h3>
+<ul>
+  <li>A session clock in the header ("03:12 / 10:00") with a progress bar, and a five-step tracker with a minute budget per step on the plan.</li>
+  <li>"Stop &amp; save" on every step; every action is saved immediately under the learner's name on the shared tablet.</li>
+  <li>Picking your name resumes at the saved step with your trials, predictions and answers ("Welcome back, Sana! You are continuing from Experiment with 3 saved trials").</li>
+  <li>At 10:00 a banner offers "Stop &amp; save" or "Finish this step first". The 4× speed option keeps 10 timed swings to about 4 seconds.</li>
+</ul>
+<div class="grid">
+  <figure><img src="screens/c1-stop-and-save.png" alt="Start screen after stop and save" /><figcaption>Stop &amp; save: back on the shared-tablet start screen with the resume message.</figcaption></figure>
+  <figure><img src="screens/c2-resume.png" alt="Resumed session" /><figcaption>Resume: Sana continues at the saved step, clock and trials intact.</figcaption></figure>
+</div>
+
+<h2 class="page-break">D5 Two contrasting learner scenarios (run on the live app)</h2>
+<h3>(a) Ravi responds correctly</h3>
+<p>Ravi predicts "the same time" for mass and angle and "more time" for a longer string. The lab confirms each prediction ("This matches your prediction. Well done, scientist!"). He runs four trials, each a fair test: 50 cm, 100 g, 10° (1.42 s) → 300 g (1.43 s) → 20° (1.41 s) → 25 cm (1.00 s). He answers 1.0 s, picks pair C and writes an evidence-based explanation, which the coach marks correct. The summary ticks all three outcomes.</p>
+<div class="grid">
+  <figure><img src="screens/a2-fair-mass-matches.png" alt="Fair test matches prediction" /><figcaption>(a) Fair test of mass matches his prediction.</figcaption></figure>
+  <figure><img src="screens/a4-check-correct.png" alt="Check tasks correct" /><figcaption>(a) Check: numeric, fair pair and explanation all correct.</figcaption></figure>
+</div>
+<figure style="width:60%"><img src="screens/a5-summary.png" alt="Summary" /><figcaption>(a) Wrap-up: ideas vs data and outcomes achieved.</figcaption></figure>
+
+<h3 class="page-break">(b) Sana shows misconception M1 ("heavier swings faster")</h3>
+<p>Sana predicts that a heavier stone takes less time and that a bigger pull takes more time. The lab starts her with the mass experiment, because that is where her prediction disagrees with physics. Her second trial changes the mass <i>and</i> the length (an unsuccessful experiment). The app names both changes, says the cause cannot be known, and offers a hint ladder without revealing which variable matters. With the fair-test helper she changes only the mass back to 100 g: the period stays about the same (1.80 s → 1.79 s), and the app gives the M1 feedback and asks "What do you think now?". In Check she answers 0.5 s (the linear-scaling gap) and writes "The heavier stone swings faster…". The coach flags M1 and sends her back to her mass trials.</p>
+<div class="grid">
+  <figure><img src="screens/b2-unfair-experiment.png" alt="Unfair experiment" /><figcaption>(b) Unsuccessful experiment: two variables changed.</figcaption></figure>
+  <figure><img src="screens/b3-hint-ladder.png" alt="Hint ladder" /><figcaption>(b) Hint ladder 1–3 and the fair-test helper choice.</figcaption></figure>
+  <figure><img src="screens/b5-fair-mass-vs-misconception.png" alt="Fair test against misconception" /><figcaption>(b) Fair test contradicts M1; she is invited to revise her idea.</figcaption></figure>
+  <figure><img src="screens/b6-check-misconception.png" alt="Check with misconception" /><figcaption>(b) Check: gap feedback for 0.5 s; coach flags M1 (labelled offline coach).</figcaption></figure>
+</div>
+<p><b>How the system responds differently:</b> the experiment order (mass first for Sana), the result card (confirmation vs misconception feedback plus revise buttons), the scaffolding (none vs the hint ladder and helper after an unfair test), the numeric feedback (praise vs the linear-scaling explanation with a lab link) and the coach reply (evidence praise vs a Socratic prompt back to her data).</p>
+
+<h2 class="page-break">D6 AI functionality specification</h2>
+<h3>Feature: Lab coach (Check, Task 7)</h3>
+<table>
+  <tr><th style="width:22%">What the AI does</th><td>Reads the learner's written explanation together with her trial data and predictions, labels the idea it shows (<code>correct</code>, <code>M1_mass</code>, <code>M2_angle</code>, <code>unclear</code>) and writes one short Socratic coaching reply in simple English.</td></tr>
+  <tr><th>Model call</th><td>Browser → <code>POST /api/coach</code> (Vercel serverless function, <code>api/coach.js</code>) → Anthropic Messages API through the official SDK, model <code>claude-opus-5-5</code>, effort <code>low</code>, <code>max_tokens</code> 1024, server-side refusal fallback enabled. The key is read from the Vercel environment variable <code>ANTHROPIC_API_KEY</code> and is never committed.</td></tr>
+  <tr><th>Input it receives</th><td>System prompt (below) plus a user message: <code>{"question":"Use your own results: does a heavier bob change the period?","answer":"The heavier stone swings faster because it has more weight.","trials":[{"n":1,"length":50,"mass":100,"angle":10,"period":1.42},{"n":2,"length":80,"mass":300,"angle":10,"period":1.8},{"n":3,"length":80,"mass":100,"angle":10,"period":1.79}],"predictions":{"mass":"less","angle":"more","length":"more"}}</code></td></tr>
+  <tr><th>What it outputs</th><td>JSON only, for example <code>{"label":"M1_mass","feedback":"Let's look at trials 2 and 3, where only the mass changed. What happened to the period?"}</code></td></tr>
+  <tr><th>Checks before the learner sees it</th><td>(1) the reply parses as JSON; (2) the label is one of the four allowed labels; (3) the feedback is 10–320 characters (short enough for this learner); (4) if the label is not <code>correct</code>, the feedback must not state the answer (regex for "mass/angle … does not change / no effect"); (5) cross-check with a rule-based classifier: an AI "correct" is rejected when the rules detect M1 or M2; (6) the browser waits at most 12 s.</td></tr>
+  <tr><th>Fallback when it fails or is wrong</th><td>If the server has no key, the call errors, times out, is refused or fails any check, a rule-based coach (keyword classifier plus recorded replies, listed in D3) answers instead. The UI labels the source every time: "AI lab coach (model)…" or "Offline coach: rule-based fallback with recorded replies, because &lt;reason&gt;".</td></tr>
+  <tr><th>Status during the exam</th><td>No API key was configured in Vercel during the exam, so the live app served the clearly labelled rule-based fallback (visible in screenshots b6 and a4). The real AI behaviour is specified above and in <code>api/coach.js</code>; adding the key in Vercel turns it on without code changes.</td></tr>
+</table>
+<h3>System prompt (exact)</h3>
+<pre>You are "Lab coach" in Jhoola Lab, a virtual pendulum lab for a Class 9 student at an NGO after-school centre in Mumbai. She speaks Hindi at home and reads simple English.
+You receive her written answer to one question, her experiment trials and her earlier predictions.
+Decide which idea her answer shows and write one short coaching reply.
+Labels:
+- "correct": she says the mass of the bob does not change the period, ideally using numbers from her trials.
+- "M1_mass": she thinks a heavier bob swings faster or slower (mass changes the period).
+- "M2_angle": she thinks a bigger angle or push changes the time for one swing.
+- "unclear": anything else.
+Rules for "feedback":
+- Simple English, at most 2 short sentences and 45 words. Friendly; use "we" or "let's".
+- Point her to her own trials, for example a fair test where only the mass changed.
+- If the label is not "correct", never state the answer (do not say that mass or angle does not change the period). Ask a question that makes her check her data.
+- If the label is "correct", praise her use of evidence in one sentence.
+Reply with JSON only, no other text: {"label": "...", "feedback": "..."}</pre>
+<p class="muted">Design judgement: the simulation itself uses no AI. Periods come from T = 2π√(L/g) with a small stopwatch error, so the data a learner reasons from is always physically correct. AI is used only where language understanding helps (free-text explanations), and it is checked and replaceable.</p>
+
+<h2>D7 Pedagogical rationale</h2>
+<ul>
+  <li><b>Inquiry cycle (predict, observe, explain):</b> predictions are made first and treated as hypotheses ("there is no wrong answer here"). The lab then confronts each one with the learner's own data, and she is asked to revise her idea ("My data changed my idea" / "I want to test again"). Conceptual change comes from her evidence, not from being told.</li>
+  <li><b>Control of variables:</b> the fair-test idea is taught up front ("change only one thing"), the table highlights changed cells in yellow after every trial, and the lab only counts a test when exactly one variable changed.</li>
+  <li><b>Feedback and scaffolding:</b> immediate, specific feedback on every task. Misconception feedback names the common belief kindly ("many of us think…") to protect a first-generation learner's confidence. Scaffolds fade: hint 1 asks a question, hint 2 points at the table rows, hint 3 offers the fair-test helper.</li>
+  <li><b>Design challenge (learning from an unsuccessful experiment without revealing the answer):</b> when two variables change, the app says what changed and why no conclusion is possible, never which variable matters. The hint ladder rebuilds the method (choose one variable, compare rows, use the helper). The physics is explained only after the learner's own fair test has produced the evidence (screens b2–b5).</li>
+  <li><b>Adaptivity:</b> <i>profile:</i> predictions are a diagnostic and decide the experiment order (Sana tests mass first); <i>performance:</i> a wrong numeric answer or a misconception in the explanation triggers targeted feedback and a link back to the lab; <i>interaction:</i> a second unfair test jumps straight to the fair-test helper, and hint use is logged.</li>
+  <li><b>Constraint C4 and the learner context:</b> shared tablets mean short, interrupted turns, so the whole activity is budgeted to 10 minutes with a visible clock, step budgets and a time-up prompt. A name-based profile picker gives per-child stop and resume on one device. 4× speed keeps each trial to about 4 seconds, and the activity is one screen per step with large touch targets.</li>
+  <li><b>Language and engagement:</b> short, conversational sentences ("Let's find out…", "we"), verbal cues (First, Second, Third), highlighted key terms, and Hindi glosses for every key term. Lexend is used because it was designed for readability.</li>
+  <li><b>Topic-specific tools:</b> stopwatch (10-swing timing), ruler (string length in cm with a red marker), protractor (starting angle), data table with change highlighting, and a period-vs-length graph.</li>
+</ul>
+
+<h2>D8 Evaluation plan</h2>
+<table>
+  <tr><th>Outcome</th><th>Assessment items / rubric</th><th>Log data collected (already logged by the app)</th><th>Success criterion</th></tr>
+  <tr><td>1 Predict and check</td><td>Pre: the three prediction MCQs. Post (next session): three new-context items (a heavier swing seat, a higher push, a longer rope).</td><td><code>predictions</code>, <code>fair_test</code> (variable, period change), <code>revise_prediction</code></td><td>≥ 80% correct on the post mass and angle items, up from the pre-test baseline; ≥ 70% of learners with M1 or M2 choose "My data changed my idea".</td></tr>
+  <tr><td>2 Design a fair test</td><td>Task 6 (fair pair) plus a transfer item: plan a fair test for a new variable. Rubric: 2 = one variable changed and others named as fixed; 1 = one variable changed; 0 = several changed.</td><td><code>trial</code>, <code>unfair_test</code>, <code>hint</code> level, <code>fair_test_helper</code></td><td>≥ 75% correct on Task 6; the share of unfair tests falls from the first to the second session; ≥ 60% complete all three fair tests without the helper by session 2.</td></tr>
+  <tr><td>3 Explain and calculate</td><td>Task 5 (numeric, 0.9–1.1 s) and Task 7 scored with a claim–evidence–reasoning rubric (0–2 each). The facilitator samples coach labels to check AI agreement.</td><td><code>task_numeric</code> verdict, <code>coach_feedback</code> (label, source, reason)</td><td>≥ 70% correct on Task 5; mean CER ≥ 4/6; AI–facilitator label agreement ≥ 85%.</td></tr>
+  <tr><td>C4 fit</td><td>Session timing and completion.</td><td><code>session_start</code>, <code>session_resume</code>, <code>stop_save</code>, <code>complete</code>, <code>elapsedMs</code></td><td>Median time to finish ≤ 10 minutes; ≥ 90% of interrupted sessions resumed at the right step.</td></tr>
+</table>
+<p>The facilitator downloads the learning log as CSV from the About screen. Usability is checked with a three-face smiley rating and a short think-aloud with five learners.</p>
+
+<h2 class="page-break">AI-use log and reflection</h2>
+<h3>AI chats, in the order used</h3>
+<table>
+  <tr><th>#</th><th>Tool and when</th><th>What it was used for</th><th>Export</th></tr>
+  <tr><td>1</td><td>Claude Code (Claude, in VS Code), 18 Nov 00:30–01:40 IST, before the exam</td><td>Exam preparation only: installed Claude Code plugins and the Vercel CLI, checked GitHub/Vercel deployment, and created an empty Vite + React + Tailwind scaffold (template code only, no app content). A practice "photosynthesis" starter was begun and deleted before the exam; none of it is in this repository.</td><td rowspan="2"><code>ai-chat-export.html</code> (same chat, exported from the Claude Code session transcript) and <code>ai-chat-summary.pdf</code></td></tr>
+  <tr><td>2</td><td>Same Claude Code chat, continued 18 Nov 18:23–19:55 IST (exam)</td><td>Read the exam document; recommended the card (P5-T1-L2-C4) with reasons, which I accepted; drafted DESIGN.md; wrote the app code, the AI coach function and this report; deployed to Vercel; ran both learner scenarios in a browser and took the screenshots.</td></tr>
+</table>
+<h3>Reflection</h3>
+<ul>
+  <li><b>What AI did well:</b> it turned the card into a coherent design quickly, wrote working code, and tested the live app end to end, which gave me screenshots of both paths.</li>
+  <li><b>Where AI was wrong and how it was caught:</b> the first version of the fair-test helper copied the earlier trial instead of the latest one, so the "fair" test actually tested a different variable. The browser test caught it and it was fixed and redeployed at 18:40. The first Vercel deployment failed because the framework preset was missing, which was fixed in <code>vercel.json</code>.</li>
+  <li><b>My judgement about AI in the product:</b> I kept AI out of the simulation so learners always reason from correct data. AI only reads free-text explanations. Its output is validated, cross-checked with rules, must not give away the answer, and always has a labelled fallback.</li>
+  <li><b>What I checked myself:</b> the physics values (T = 2π√(L/g): 50 cm gives 1.42 s, 25 cm gives 1.00 s, 100 cm gives 2.01 s), that the misconceptions and feedback fit Sana's persona, and that the identity token appears on every screen.</li>
+</ul>
+
+</body>
+</html>
