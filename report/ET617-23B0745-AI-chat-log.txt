@@ -1,0 +1,1030 @@
+AI CHAT LOG: ET 617 End-Semester Examination
+Student identity token: 23B0745
+AI tool: Claude Code (Claude), used inside VS Code
+App: https://et617-23b0745.vercel.app
+Repo: https://github.com/vishalpatel04/et617-endsem-23B0745
+
+This is one continuous chat, in the order it happened: exam preparation on 18 Nov (about 00:30-01:40 IST),
+then the exam itself from 18:23 IST. Every message from the student and from Claude is included in full.
+Actions Claude took with tools (reading files, running commands, writing code, deploying, testing) are listed
+one per line as "[Tool] name: purpose"; their raw outputs are omitted for length. System notes and the
+student email address are removed.
+====================================================================================================
+
+----- STUDENT (18 Nov 2026, 00:37 IST) -----
+Development (2 hours)
+•  The problem statement will be provided at the beginning of the examination.
+•  You must develop a functional educational application and deploy it to an accessible URL.
+•  You may use your laptop, internet, documentation, AI tools, and development platforms.
+•  Your application must be accessible and demonstrable by 8:00 PM.
+
+Assessment (1 hour)
+•  Applications will be evaluated based on functionality, educational relevance, design, and implementation.
+•  You should be prepared to demonstrate your application and explain your design decisions.How to Prepare
+•  Bring your laptop and charger.
+•  Ensure your development environment, GitHub account, and hosting platform are configured and working beforehand.
+•  Revise the concepts covered in ET 617, particularly educational application design, learner personas, instructional content, UI/UX, and evaluation.
+•  Familiarize yourself with your preferred development tools and deployment process.
+hey go through this pdf and files as a reference and the above problem will me my 3hr task and of marks so it is very imporant for me to have no mistakes so please do it properly and also suggest me what are extension i need to download on the claude to make the assignment webdev more strong and workable as i need to make the working model with various unique feature so that it looks professional and higly workable so please give me ideal how we are doing it
+
+----- CLAUDE (18 Nov 2026, 00:37 IST) -----
+Failed to authenticate: OAuth session expired and could not be refreshed
+
+----- STUDENT (18 Nov 2026, 00:38 IST) -----
+do again
+
+----- CLAUDE (18 Nov 2026, 00:38 IST) -----
+I'll start by looking at what's in your ET617 folder.
+
+[Tool] Bash: List files in the ET617 folder
+[Tool] Bash: Check available extraction tools
+----- CLAUDE (18 Nov 2026, 00:39 IST) -----
+I'll pull the slide text out of the PPTX files directly (they're zip archives) and read the PDF.
+
+[Tool] Bash: Extract slide text from the three PPTX decks
+[Tool] Read: /Users/vishalchandrapatel/Desktop/ET617/Slide Deck for Software Development Models.pdf
+----- CLAUDE (18 Nov 2026, 00:39 IST) -----
+Several slides are images only (CLT, ADDIE, DBR, Revised Bloom's), so their text didn't come through. Now I'll try to extract the PDF text.
+
+[Tool] Bash: Try extracting PDF text via Spotlight metadata
+[Tool] Bash: Extract PDF text using macOS PDFKit
+----- CLAUDE (18 Nov 2026, 00:40 IST) -----
+I've read everything. Next I'll check whether your machine is ready for exam day.
+
+[Tool] Bash: Check installed dev and deploy tools
+----- CLAUDE (18 Nov 2026, 00:40 IST) -----
+I read your three class decks (Jul 29, Jul 31, Aug 7) and the Software Development Models PDF. Your machine is mostly ready: Node 23, npm, git, Python 3.12, and the GitHub CLI logged in as `vishalpatel04`. The only thing missing is a hosting CLI, so you need to set up Vercel and test a deploy before exam day.
+
+A few slides are pictures only, so their text didn't come through: Cognitive Load Theory, ADDIE, design-based research (DBR) and Revised Bloom's. I know those topics, and they're covered below.
+
+## 1. What the examiner will be looking for
+
+Your materials point to five things your app should show:
+
+| Course concept | Where it came from | What it means for your app |
+|---|---|---|
+| **Login + clickstream capture** | Assignment 1 (Class 1/2) | Users sign in, and every click, page view, quiz attempt and time spent is logged |
+| **Learner personas** | StudyStreak activity (Class 2) | An "About the learner" page with 1–2 personas built from the problem's real constraints, not stereotypes |
+| **Design principles that trace to theory** | Class 2 group answers | Each feature follows "We will ___ because [persona need or theory]" |
+| **Learning theories** | Bloom's, memory model, Cognitive Load Theory, ADDIE, DBR | Features built on these (see section 3) |
+| **Usability heuristics** | Group 5's answer (recognition over recall, consistency, feedback, error prevention, flexibility) | Visible in the UI and easy to point to during the demo |
+| **Development model** | Software Development Models PDF (Scrum, Kanban, XP, Lean, V-Model, Spiral, Waterfall) | Say you followed a lean, iterative approach: smallest working version first, then add features |
+| **Evaluation / data analysis** | "User data collection and analysis report" deliverable | A dashboard that turns the clickstream into charts and insights |
+
+Most students will build a nice-looking quiz app. The **persona → principle → feature → data** chain, visible inside the app, is what will set yours apart.
+
+## 2. The app structure to use for any problem statement
+
+Whatever the topic, build these screens:
+
+1. **Landing page:** who it's for, the problem, and the learning objectives written with Bloom's verbs ("Students will *identify*… *apply*… *evaluate*…").
+2. **Login / sign-up:** lets you track each learner and shows you remember Assignment 1.
+3. **Learner personas page:** 1–2 personas (name, age, context, goal, frustration, what motivates them, which theory explains them).
+4. **Learning module:** content broken into short chunks, which is Cognitive Load Theory in practice.
+5. **Practice / quiz:** questions tagged by Bloom's level, instant feedback with an explanation, hints for scaffolding, and a retry option.
+6. **Progress page:** streaks, mastery per topic, badges. This is the motivation feature.
+7. **Analytics dashboard (instructor view):** charts from the clickstream (time per module, quiz accuracy by Bloom's level, where learners drop off, most-missed questions). This is your **evaluation** story.
+8. **Design rationale page:** a table of feature → principle → theory. You'll explain your design decisions in the assessment hour, and this page answers that for you.
+
+**Features that make it look professional** (pick what fits the problem):
+- Spaced-repetition review queue (memory model: retrieval strengthens long-term memory)
+- Adaptive difficulty that moves up a level after two correct answers and offers a hint after a wrong one (zone of proximal development)
+- Language toggle, e.g. English/Hindi (persona constraint)
+- Works offline with saved progress (persona constraint: patchy internet)
+- Dark mode, mobile-first layout, keyboard accessible
+- Export the clickstream as CSV (useful for the data-analysis part)
+- An optional AI tutor hint, only if an API key is easy to get. Keep it optional so the demo never depends on it.
+
+## 3. Learning theory → feature reference (memorise this for the viva)
+
+| Theory | Feature | One line to say in the demo |
+|---|---|---|
+| Bloom's Taxonomy (revised) | Quiz questions tagged Remember → Create; dashboard shows accuracy per level | "Questions progress from recall to higher-order thinking." |
+| Atkinson-Shiffrin memory model | Spaced review and retrieval practice | "Retrieval moves knowledge from short-term to long-term memory." |
+| Cognitive Load Theory | Short chunks, one idea per screen, minimal UI | "We cut unnecessary load so working memory isn't overloaded." |
+| ADDIE | Your build process: Analyse (persona) → Design (principles) → Develop → Implement (deploy) → Evaluate (dashboard) | "The app's structure mirrors ADDIE." |
+| DBR (design-based research) | Feedback button plus dashboard used to iterate | "The analytics close the loop for the next design iteration." |
+| Usability heuristics | Clear feedback, consistency, error prevention, recognition over recall | Point to a specific screen for each one |
+
+## 4. Tech stack (chosen so it won't break)
+
+- **React + Vite + Tailwind CSS**: fast to build and looks polished.
+- **Recharts** for the dashboard charts.
+- **Data storage:**
+  - Default: **localStorage**. It has no backend, needs no setup and can't fail during the demo.
+  - Upgrade: **Supabase** (free) for real login and a shared database. Only use it if you've tested it beforehand.
+- **Hosting:** **Vercel**, connected to a GitHub repo. Each push redeploys automatically and you get a public URL in about a minute.
+
+## 5. Your 2-hour plan on exam day
+
+| Time | Task |
+|---|---|
+| 0:00–0:15 | Read the problem, write the persona, 3–5 learning objectives and 5 design principles. Paste the problem to me and I'll draft these with you. |
+| 0:15–0:25 | Copy your pre-built starter app, change the topic and content, deploy straight away so a working URL exists from the start |
+| 0:25–1:15 | Build the learning module, quiz and progress page with real content for the problem |
+| 1:15–1:35 | Analytics dashboard and design rationale page |
+| 1:35–1:50 | Test on desktop and phone, fix bugs, final deploy |
+| 1:50–2:00 | Keep a buffer, put the URL and repo link in the README, and rehearse a 3-minute demo |
+
+**Rule:** deploy early and often. A deployed basic app beats an unfinished advanced one.
+
+## 6. Tools to add to Claude Code (install and test today, not in the exam)
+
+| Tool | Why it helps | How to get it |
+|---|---|---|
+| **Playwright MCP** | Lets me open your app in a real browser, click through it and catch bugs before the examiner does | `claude mcp add playwright -- npx @playwright/mcp@latest` |
+| **Context7 MCP** | Gives me up-to-date docs for React, Tailwind and Supabase, so fewer outdated-code mistakes | `claude mcp add context7 -- npx -y @upstash/context7-mcp` |
+| **Frontend-design plugin** (official Anthropic plugin) | Pushes the UI toward a polished, less generic look | Type `/plugin` in Claude Code and look for `frontend-design` in the official marketplace |
+| **Vercel CLI** | Deploy from the terminal | `npm i -g vercel` then `vercel login` |
+| GitHub CLI | Create the repo and push | Already installed and logged in ✓ |
+
+VS Code extensions: **ESLint**, **Prettier**, **Tailwind CSS IntelliSense** and **Error Lens** (shows errors inline).
+
+Don't install too much: every extra tool is something that can break on the day. The four in the table are enough.
+
+## 7. What I recommend we do now
+
+The biggest advantage you can have is building a **reusable starter app today**. It would include login, clickstream logging, the persona page, a quiz engine with Bloom's tags, the progress page, the analytics dashboard and the design rationale page. We'd deploy it to Vercel once to prove the whole process works. In the exam you'd only swap in the content for the given problem, which turns a risky 2-hour build into about 1.5 hours of customising and polishing.
+
+Should I build that starter app now? Before that, install the Vercel CLI and run `vercel login` so we can test a real deploy.
+
+----- STUDENT (18 Nov 2026, 00:42 IST) -----
+tools that i need to install on the claude can you please install that
+
+----- CLAUDE (18 Nov 2026, 00:43 IST) -----
+I'll install the Claude Code tools I recommended: Playwright MCP, Context7 MCP, the frontend-design plugin and the Vercel CLI. First I'll check how Claude Code and Node are set up on your machine so the installs go to the right place.
+
+[Tool] Bash: Check Claude CLI, npm global path, Chrome and VS Code CLI
+[Tool] Bash: Check latest versions of the packages on npm
+[Tool] Bash: List existing MCP servers and plugin CLI options
+----- CLAUDE (18 Nov 2026, 00:43 IST) -----
+There are no local MCP servers yet (just your claude.ai connectors), and the plugin CLI can install from a marketplace. Next I'll check which marketplaces and plugins you already have.
+
+[Tool] Bash: List plugin marketplaces and installed plugins
+----- CLAUDE (18 Nov 2026, 00:43 IST) -----
+The official Anthropic marketplace is already connected. I'll confirm `frontend-design` is listed in it before installing.
+
+[Tool] Bash: Look up web-dev plugins in the official marketplace
+[Tool] Bash: Show contents and token cost of four plugins
+----- CLAUDE (18 Nov 2026, 00:43 IST) -----
+`details` only works after a plugin is installed, so I'll read the four marketplace entries directly instead.
+
+[Tool] Bash: Print marketplace entries for the four plugins
+----- CLAUDE (18 Nov 2026, 00:43 IST) -----
+Next I'll look at what the Playwright and Context7 plugins actually run.
+
+[Tool] Bash: Show files and MCP config inside three plugins
+[Tool] Bash: Show plugin install options
+[Tool] Bash: Install the Vercel CLI globally
+----- CLAUDE (18 Nov 2026, 00:44 IST) -----
+The Vercel CLI is installed (65.17.0). Next I'll install the three plugins at user scope, so they work in whatever folder you use on exam day.
+
+[Tool] Bash: Install frontend-design, playwright and context7 plugins
+----- CLAUDE (18 Nov 2026, 00:44 IST) -----
+All three installed. Next I'll download the Playwright package ahead of time so its first launch is fast, then check that both MCP servers connect.
+
+[Tool] Bash: Pre-cache Playwright MCP and verify plugin and MCP health
+[Tool] Bash: Check which recommended VS Code extensions exist
+[Tool] Bash: Install ESLint, Tailwind IntelliSense and Error Lens extensions
+----- CLAUDE (18 Nov 2026, 00:45 IST) -----
+Everything is installed. I'll save the exam setup to memory so a new session on exam day has the context.
+
+[Tool] Write: /Users/vishalchandrapatel/.claude/projects/-Users-vishalchandrapatel-Desktop-ET617/memory/et617-exam-plan.md
+[Tool] Write: /Users/vishalchandrapatel/.claude/projects/-Users-vishalchandrapatel-Desktop-ET617/memory/MEMORY.md
+----- CLAUDE (18 Nov 2026, 00:45 IST) -----
+I've installed and checked all the tools, but they won't work in this chat until you reload Claude Code and do two sign-ins.
+
+| Tool | What it does for you | Status |
+|---|---|---|
+| **frontend-design** plugin (by Anthropic) | Makes the app's design look polished instead of generic | ✅ Installed |
+| **Playwright** plugin (by Microsoft) | Lets me open your app in Chrome, click through it and catch bugs before the demo | ✅ Installed, and the connection test passed |
+| **Context7** plugin | Gives me current docs for React, Tailwind, Vite and Supabase, so the code isn't outdated | ⚠️ Installed, needs your sign-in |
+| **Vercel CLI** 65.17.0 | Puts your app online at a public URL | ✅ Installed, needs your sign-in |
+| VS Code: ESLint, Tailwind IntelliSense, Error Lens | Show errors and Tailwind class suggestions as you type | ✅ Installed (you already had Prettier) |
+
+The plugins are installed for your whole account, so they'll work in any folder on exam day. I left out the Vercel plugin because the CLI covers deploying and is less likely to cause problems.
+
+## Three steps only you can do (about 3 minutes)
+
+1. **Reload Claude Code.** Press `Cmd+Shift+P`, type **Developer: Reload Window**, and press Enter. The new tools only load in a fresh session.
+2. **Sign in to Context7.** In Claude Code, type `/mcp`, choose **context7**, then **Authenticate**, and finish the sign-in in your browser.
+3. **Sign in to Vercel.** Open the VS Code terminal (`` Ctrl+` ``), run `vercel login`, and choose **Continue with GitHub** using your `vishalpatel04` account. Linking it to GitHub means every `git push` redeploys your app automatically.
+
+Once those are done, ask me to **build the starter app**. I'll create the reusable app we planned (login, clickstream tracking, persona page, quiz, analytics dashboard, design-rationale page), put it on GitHub, deploy it to Vercel, and test it in the browser with Playwright. You'll then know the whole process from code to live URL works before exam day.
+
+I've also saved the exam plan to Claude's memory, so a new chat on exam day starts with this context.
+
+----- STUDENT (18 Nov 2026, 00:52 IST) -----
+i connect the vercel with my github can you check that
+
+----- CLAUDE (18 Nov 2026, 00:52 IST) -----
+I'll check your Vercel login and whether it's linked to GitHub.
+
+[Tool] Bash: Check Vercel login, teams and projects
+[Tool] Bash: Confirm Vercel user and look for API command
+----- CLAUDE (18 Nov 2026, 00:52 IST) -----
+I'll ask the Vercel API which GitHub accounts and repos Vercel can access.
+
+[Tool] Bash: Query Vercel API for user and GitHub link
+----- CLAUDE (18 Nov 2026, 00:53 IST) -----
+The CLI attaches your team ID automatically, and this endpoint rejects that. I'll check the command's options.
+
+[Tool] Bash: Show vercel api command options
+----- CLAUDE (18 Nov 2026, 00:53 IST) -----
+I'll try the repo-search endpoint instead, which works with a team scope.
+
+[Tool] Bash: List GitHub repos visible to Vercel
+----- CLAUDE (18 Nov 2026, 00:53 IST) -----
+Vercel returned no GitHub account and no repos. I'll look at the raw response and count your GitHub repos to rule out an empty account.
+
+[Tool] Bash: Show raw Vercel response and count GitHub repos
+[Tool] Bash: List GitHub Apps installed on your GitHub account
+----- CLAUDE (18 Nov 2026, 00:53 IST) -----
+Vercel is **not** connected to your GitHub yet.
+
+**What's working:**
+- The Vercel CLI is logged in as **`vishalp22233-3800`** (team "vishal's projects", Hobby plan). It wasn't signed in when I started; one of my commands began the sign-in and it was approved in your browser.
+- GitHub CLI is logged in as **`vishalpatel04`**, with 24 public repos.
+
+**What's missing:** I asked Vercel which GitHub repos it can access. It returned no GitHub account (`namespaceId: null`) and **0 repos**, while your GitHub has 24. So pushing to GitHub would not auto-deploy yet.
+
+**Likely cause:** the username `vishalp22233-3800` comes from your email, so this Vercel account was probably created with email rather than GitHub. Either you linked GitHub to a different Vercel account, or the last step (installing the Vercel app on GitHub) wasn't finished.
+
+## How to fix it (about 2 minutes)
+
+1. Go to **vercel.com** and check the account shown at the top left. It should be **vishalp22233-3800**, the one the CLI uses.
+2. Open **vercel.com/account/authentication** and click **Connect** next to GitHub. Sign in as `vishalpatel04`.
+3. Open **vercel.com/new**. Under "Import Git Repository", click **Install** (or **Add GitHub Account**), choose **vishalpatel04**, select **All repositories**, and save.
+
+If step 1 shows a different account (for example one named `vishalpatel04`), you have two Vercel accounts. In that case, run `vercel logout` and then `vercel login` in the terminal, and choose **Continue with GitHub**. The CLI will then use the account you already linked.
+
+Tell me when you're done and I'll run the check again. Once it shows your repos, I can do a full test: push a small app to GitHub and confirm Vercel deploys it to a live URL.
+
+----- STUDENT (18 Nov 2026, 00:53 IST) -----
+see this
+[1 screenshot(s) attached]
+
+----- CLAUDE (18 Nov 2026, 00:53 IST) -----
+Your screenshot shows GitHub (`vishalpatel04`) linked as a **sign-in method** on the same Vercel account the CLI uses. Repo access is a separate step, so I'll check whether Vercel can see your repos now.
+
+[Tool] Bash: Re-check which GitHub repos Vercel can access
+----- CLAUDE (18 Nov 2026, 00:53 IST) -----
+The sign-in link worked, but Vercel still sees **0 repos**. Linking GitHub as a sign-in method only lets you log in with GitHub. To deploy your repos, you also have to install the **Vercel app on GitHub**, and that hasn't been done yet.
+
+## The last step (about 1 minute)
+
+1. Open **https://github.com/apps/vercel/installations/new**
+2. Choose your account, **vishalpatel04**.
+3. Select **All repositories**. On exam day you'll create a new repo, and with this option Vercel sees it automatically.
+4. Click **Install** and approve if GitHub asks.
+
+You can also do it from **vercel.com/new**: under "Import Git Repository", click **Install** next to GitHub.
+
+Tell me once it's installed and I'll check again. When your repos show up, the GitHub-to-Vercel auto-deploy is ready, and we can run a full test deploy.
+
+----- STUDENT (18 Nov 2026, 00:56 IST) -----
+now check all requirement to proceed the development is done.any other things need to do?
+
+----- CLAUDE (18 Nov 2026, 00:57 IST) -----
+I'll run a full readiness check: confirm every tool works and test the whole pipeline from code to a live URL. First, the account and tool checks.
+
+[Tool] Bash: Check Vercel, GitHub, git and Claude plugin readiness
+[Tool] ToolSearch: select:mcp__plugin_context7_context7__resolve-library-id,mcp__plugin_context7_context7__query-docs
+[Tool] Bash: Query Vercel repo access for your GitHub account ID
+[Tool] mcp__plugin_context7_context7__resolve-library-id: Install Tailwind CSS v4 in a Vite React project using the @tailwindcss/vite plugin
+[Tool] mcp__plugin_context7_context7__query-docs: Install Tailwind CSS v4 with Vite using @tailwindcss/vite plugin: vite.config setup and CSS import
+[Tool] Bash: Check current versions of the planned stack
+----- CLAUDE (18 Nov 2026, 00:57 IST) -----
+Context7 returned the current Tailwind v4 setup. Next I'll build a small throwaway test app with your exam stack in the scratchpad folder (not your ET617 folder).
+
+[Tool] Bash: Show create-vite options
+[Tool] Bash: Scaffold Vite React app and install Tailwind and Recharts
+----- CLAUDE (18 Nov 2026, 00:58 IST) -----
+Everything installed in 13 seconds. Next I'll wire in Tailwind and put a small Tailwind + Recharts test page in place.
+
+[Tool] Bash: Configure Tailwind, write test page, run production build
+----- CLAUDE (18 Nov 2026, 00:58 IST) -----
+The production build passed. The chunk-size warning is just Recharts being a large library and is harmless. Next I'll serve the built app locally and open it in a real browser with Playwright.
+
+[Tool] Bash: Serve the built test app on port 4317
+[Tool] mcp__plugin_playwright_playwright__browser_navigate: http://localhost:4317
+[Tool] mcp__plugin_playwright_playwright__browser_take_screenshot
+[Tool] mcp__plugin_playwright_playwright__browser_console_messages
+[Tool] mcp__plugin_playwright_playwright__browser_take_screenshot
+[Tool] Bash: Deploy the test app to Vercel production
+----- CLAUDE (18 Nov 2026, 00:59 IST) -----
+It deployed in 15 seconds. Next I'll check that the live URL is **publicly reachable** and not behind a Vercel login, because examiners need to open it.
+
+[Tool] Bash: Check the live URL loads without login
+[Tool] mcp__plugin_playwright_playwright__browser_navigate: https://et617-readiness-test.vercel.app
+[Tool] Bash: Confirm the live page rendered its content
+[Tool] mcp__plugin_playwright_playwright__browser_console_messages
+[Tool] Bash: Check git push auth and commit email linking
+[Tool] mcp__plugin_playwright_playwright__browser_close
+[Tool] TaskStop
+[Tool] Bash: Check keychain GitHub login and list Playwright output files
+[Tool] Bash: Remove Playwright test output from ET617 folder
+[Tool] Edit: /Users/vishalchandrapatel/.claude/projects/-Users-vishalchandrapatel-Desktop-ET617/memory/et617-exam-plan.md
+----- CLAUDE (18 Nov 2026, 00:59 IST) -----
+Everything you need to build and deploy works. I tested it end to end by building a small app, opening it in a browser and putting it online. The one thing still missing is optional: the Vercel app on GitHub, which only adds auto-deploy on `git push`.
+
+| Check | Result |
+|---|---|
+| Node, npm, git | ✅ Working |
+| Vite + React + Tailwind v4 + Recharts | ✅ App created, packages installed in 13 seconds, production build passed |
+| Playwright (Claude can test your app in a browser) | ✅ Opened the app: styling applied, chart and tooltips work, 0 console errors |
+| Context7 (current docs for React, Tailwind and Vite) | ✅ Signed in; it returned the current Tailwind setup steps |
+| frontend-design plugin | ✅ Enabled |
+| Vercel CLI deploy | ✅ Live in **15 seconds** at https://et617-readiness-test.vercel.app, publicly reachable (HTTP 200, no login needed) |
+| GitHub CLI and `git push` login | ✅ Logged in as `vishalpatel04`, password saved in your keychain |
+| Commit email linked to your GitHub | ✅ Your commits show as `vishalpatel04`, so Vercel credits them to you |
+| **Vercel app installed on GitHub** | ❌ **Not yet.** Vercel's API still says "Vercel App is not installed" |
+
+## What's left
+
+**1. Install the Vercel app on GitHub.** This doesn't block deploying, because the CLI path above already works. It's what makes every `git push` redeploy automatically. To do it:
+- Open https://github.com/apps/vercel/installations/new
+- Choose **vishalpatel04**, select **All repositories**, and click **Install**.
+
+**2. Exam-day basics**
+- Your phone hotspot as backup internet, because installing packages and deploying both need internet.
+- Laptop charger.
+- Deploy in the first 15 minutes, then keep redeploying.
+
+**3. The test project on Vercel.** It's a single test page. You can keep it as proof the setup works, or I can delete it.
+
+I also deleted the test screenshots Playwright left in your ET617 folder. On exam day the project needs a `.gitignore` entry for that folder so they don't get committed; I've noted that in memory.
+
+Once the GitHub app is installed, tell me and I'll confirm Vercel can see your repos. Then I can build the reusable starter app (login, clickstream tracking, persona page, Bloom's quiz, analytics dashboard, design-rationale page), so on exam day you only change the content for the given problem.
+
+----- STUDENT (18 Nov 2026, 01:00 IST) -----
+and please note that i really need to make this assignment really good in one go with no error so that i looks really professional andd the features and the other things really in working state and so i will award full marks for that
+
+----- CLAUDE (18 Nov 2026, 01:04 IST) -----
+Noted. "Really good, no errors, every feature working" will be the standard for everything we build. First I'll save that so it carries into exam day.
+
+[Tool] Write: /Users/vishalchandrapatel/.claude/projects/-Users-vishalchandrapatel-Desktop-ET617/memory/et617-quality-bar.md
+[Tool] Bash: Recheck Vercel GitHub app and library versions
+[Tool] Edit: /Users/vishalchandrapatel/.claude/projects/-Users-vishalchandrapatel-Desktop-ET617/memory/MEMORY.md
+[Tool] mcp__plugin_context7_context7__resolve-library-id: React Router v8 declarative mode BrowserRouter Routes Route NavLink useNavigate useParams setup
+----- CLAUDE (18 Nov 2026, 01:05 IST) -----
+Context7 has docs for React Router 7, but npm's latest is 8. To avoid surprises I'll pin the newest 7.x release, which is well documented. Next I'll create the starter project in your ET617 folder.
+
+[Tool] Bash: Scaffold the starter project and inspect the template
+----- CLAUDE (18 Nov 2026, 01:05 IST) -----
+The project is created. Next I'll install the libraries at exact versions, so exam-day installs give the same result, and look at the template's config files.
+
+[Tool] Bash: Install pinned dependencies and show template configs
+----- CLAUDE (18 Nov 2026, 01:05 IST) -----
+Dependencies are installed. Before designing the screens I'll load the frontend-design skill, so the app looks distinctive rather than like a template.
+
+[Tool] Skill: frontend-design:frontend-design
+[Tool] Bash: Check which Lucide icon names exist
+----- CLAUDE (18 Nov 2026, 01:12 IST) -----
+Some icon names changed in this version. I'll look up the replacements.
+
+[Tool] Bash: Find replacement Lucide icon names
+[Tool] Bash: Find the warning icon name
+[Tool] Bash: Write build, routing, favicon and script config
+[Tool] Bash: Check Vercel repo access, machine basics and scaffold state
+[Tool] Bash: Show generated API request with token redacted
+----- CLAUDE (18 Nov 2026, 01:28 IST) -----
+The generated request uses a placeholder token, so I'll read your saved Vercel token into a variable (never printed) and call the endpoint without the team ID.
+
+[Tool] Bash: Query Vercel GitHub link without team scope, token hidden
+[Tool] Bash: Reset scaffold to a clean placeholder, then lint and build
+[Tool] Bash: Find your smallest GitHub repo for a push test
+[Tool] Bash: Dry-run git push to verify GitHub auth; rerun lint
+[Tool] Bash: Redeploy test app with SPA rewrite and check deep links
+[Tool] Bash: Recheck deep link and inspect project settings
+[Tool] Bash: Confirm deep links serve the app page
+[Tool] Bash: Remove scratch clone and build output, list folders
+----- CLAUDE (18 Nov 2026, 01:30 IST) -----
+Everything is clean. Now I'll save the verified exam-day procedure to memory, so on exam day I can go straight to building without re-checking anything.
+
+[Tool] Write: /Users/vishalchandrapatel/.claude/projects/-Users-vishalchandrapatel-Desktop-ET617/memory/et617-exam-plan.md
+----- CLAUDE (18 Nov 2026, 01:30 IST) -----
+I've stopped building the app; it gets built on exam day from your problem statement. Everything the exam depends on is checked and working except one optional step: Vercel can't yet see your GitHub repos.
+
+| What exam day needs | Status |
+|---|---|
+| Node, npm, git | ✅ Working |
+| Ready-made empty project (`ET617/et617-starter`) | ✅ All libraries installed at fixed versions, passes lint and build. It only holds a placeholder page, so setup takes seconds on the day. |
+| Deploying to a live URL | ✅ About 15 seconds from the terminal |
+| Links straight to a page (e.g. `/practice`) | ✅ Return the app instead of a 404, so refreshing during the demo is safe |
+| GitHub login and `git push` | ✅ Tested with a dry-run push to your repo; nothing was changed |
+| Commits credited to `vishalpatel04` | ✅ |
+| Claude tools (Playwright, Context7, frontend-design) | ✅ All connected |
+| Laptop | ✅ 82 GB free, clock set to India time |
+| **Vercel reading your GitHub repos** | ⚠️ **Not linked yet.** GitHub shows the app installed, but Vercel's API still says it isn't. This only affects auto-deploy on every `git push`; the terminal deploy above already works, so it won't block the exam. |
+
+**Optional fix (1 minute):** open **vercel.com/new**.
+- If your repos are listed under "Import Git Repository", it's linked.
+- If you see a GitHub button or account menu instead, click it and choose **vishalpatel04**. GitHub opens the same settings page as your screenshot. Click **Save** and it returns you to Vercel.
+
+Tell me when that's done and I'll check again.
+
+## On exam day
+
+1. **Before the exam:** charge the laptop and bring the charger (battery is at 85% now). Set up your phone hotspot as backup internet. Make sure GitHub and Vercel are signed in in your browser. Go easy on Claude usage that morning so you don't hit a usage limit mid-exam.
+2. **When you get the question,** paste it to me like this:
+   ```
+   ET617 exam. Problem statement:
+   <paste the full problem statement, plus any marking criteria they give>
+   Build it.
+   ```
+3. **What I'll do:** draft the personas, objectives and design principles first. Then I'll build in a copy of the empty project, put a first version online within about 25 minutes, test it in the browser at desktop and phone width, push it to GitHub, and redeploy after each feature.
+
+Memory now holds the exam-day steps, the tested commands and your quality bar, so a new chat on exam day picks up straight from here. The test app at https://et617-readiness-test.vercel.app is still online; tell me if you want it deleted.
+
+----- STUDENT (18 Nov 2026, 01:33 IST) -----
+so are you ready to make the bestest ever app develpment will all new features working professionally and cleanly
+
+----- CLAUDE (18 Nov 2026, 01:33 IST) -----
+I'll quickly check whether the one open item, Vercel seeing your GitHub repos, is fixed now.
+
+[Tool] Bash: Recheck whether Vercel can see GitHub repos
+----- CLAUDE (18 Nov 2026, 01:33 IST) -----
+Yes, I'm ready. All the tools are installed and tested, and an empty project is waiting in your ET617 folder. The only thing missing is your problem statement.
+
+I can't promise nothing will ever go wrong, but nothing reaches you untested. Every feature goes through a production build, a click-through in a real browser at laptop and phone size, and a check for zero console errors before I call it done. If something isn't fully working, I'll drop it rather than show it half-finished.
+
+On exam day the app will include, adapted to your problem:
+
+- **Learner personas and design principles** written as "We will ___ because ___" and linked to course theory (Bloom's, Cognitive Load Theory, the memory model, ADDIE).
+- **Login and clickstream tracking**, recording every click, page and answer, which matches your Assignment 1.
+- **Short lessons** with a quick check at the end of each.
+- **Practice that adapts to the learner**, with hints, instant feedback and Bloom's levels.
+- **Spaced review** of missed questions, plus streaks, XP and badges.
+- **A teacher analytics dashboard** built from the clickstream, with charts, insights and CSV export.
+- **A design rationale page** for your viva.
+- **Phone-first layout** with dark mode and keyboard access, live on a public URL, with a GitHub repo.
+
+**One item is still open.** Vercel still says its GitHub app isn't installed for your account. This doesn't affect the exam, because deploying from the terminal already works. If you want push-to-deploy too:
+- Open **vercel.com/new**.
+- Click the GitHub button or account menu under "Import Git Repository" and choose **vishalpatel04**.
+- Click **Save** on the GitHub page that opens.
+
+On exam day, paste this and I'll start immediately:
+```
+ET617 exam. Problem statement:
+<full problem statement + any marking criteria>
+Build it.
+```
+
+----- STUDENT (18 Nov 2026, 01:38 IST) -----
+[1 screenshot(s) attached]
+
+----- CLAUDE (18 Nov 2026, 01:38 IST) -----
+Your screenshot shows Vercel listing your GitHub repos (Group-6_2026, ET610, PS647, …) under **vishalpatel04**, so the link is working on Vercel's side. I'll check whether the API now agrees.
+
+[Tool] Bash: Recheck Vercel repo access and test project link
+[Tool] Edit: /Users/vishalchandrapatel/.claude/projects/-Users-vishalchandrapatel-Desktop-ET617/memory/et617-exam-plan.md
+----- CLAUDE (18 Nov 2026, 01:39 IST) -----
+Yes, Vercel is now linked to your GitHub. Your screenshot shows Vercel listing your repos under **vishalpatel04**, and that was the last open item, so every exam-day requirement on my checklist now passes.
+
+**Don't click "Connect" on any of those repos.** That page is the Git settings of the test project (`et617-readiness-test`). Connecting Group-6_2026, ET610 or any other repo there would make every future push to that repo deploy into the test project. On exam day we'll create a new repo for the app and connect only that one.
+
+One note: my own API check still says "not installed", even though Vercel's dashboard clearly sees your repos. The dashboard is the reliable source, so I've recorded in memory to trust it over that check. Also, an actual push-triggered deploy hasn't been tried yet. That doesn't put the exam at risk, because deploying from the terminal is proven and is my first step anyway.
+
+If you want push-to-deploy proven before exam day, say **"run the push test"**. I'll create a private throwaway repo, connect it to the test project, push one commit and confirm the deploy happens on its own. It takes about 2 minutes, and afterwards you can delete the repo in GitHub settings.
+
+Otherwise you're all set. On exam day, paste the problem statement and I'll start building.
+
+----- STUDENT (18 Nov 2026, 13:13 IST) -----
+so are you ready to make the 2 part development and the thing i made have to explain it by me in the presentation
+
+----- CLAUDE (18 Nov 2026, 13:14 IST) -----
+Yes, I'm ready for both parts.
+
+**Part 1: Development (2 hours).** You paste the problem statement and I build, test and deploy the app, as planned.
+
+**Part 2: Presentation (1 hour).** You'll be the one explaining, so before the 2 hours end I'll give you a **presentation pack** written in simple words you can say yourself:
+
+1. **A 3-minute demo script:** which screen to open, what to click and what to say at each step.
+2. **Your design decisions in plain language.** Each feature gets one line: "We built X because the persona needs Y, based on theory Z (Bloom's, Cognitive Load Theory, the memory model, ADDIE)."
+3. **Likely viva questions with short answers.** For example: "How do you capture clickstream data?", "Where is the data stored?", "How does the app adapt to the learner?", "How would you evaluate whether learners actually learned?", "What are the limitations and next steps?"
+4. **A "how it works" explanation:** the main parts of the code in a few sentences, so you can answer technical questions with confidence.
+
+The app will also include a **Design rationale page** you can present from directly. It shows the personas, each feature with the principle and theory behind it, the ADDIE process and what the analytics measure.
+
+**How the 2 hours will split:**
+
+| Time | Work |
+|---|---|
+| 0:00–0:10 | I draft the personas, learning objectives and design principles; you approve them |
+| 0:10–1:30 | I build, deploying after each working feature |
+| 1:30–1:45 | Final testing on laptop and phone width, final deploy, GitHub repo |
+| 1:45–2:00 | I hand you the presentation pack; you rehearse the demo once |
+
+I'll also keep the code simple and clearly named, so anything you're asked about is easy to explain.
+
+I've added this two-part plan to memory below. If you want a head start, I can make a **one-page viva cheat sheet** today covering the course concepts (Bloom's, Cognitive Load Theory, the memory model, ADDIE, DBR, personas, usability heuristics, clickstream analytics), explained simply with app examples. That's study material, not the app itself.
+
+[Tool] Edit: /Users/vishalchandrapatel/.claude/projects/-Users-vishalchandrapatel-Desktop-ET617/memory/et617-exam-plan.md
+----- CLAUDE (18 Nov 2026, 13:14 IST) -----
+The two-part plan is now saved in memory, so on exam day I'll build the app and also prepare you to present it. Just tell me if you want the viva cheat sheet today.
+
+----- STUDENT (18 Nov 2026, 18:23 IST) -----
+hey i have attach the document that is my exam assesment so please read it properly and tell me which topic is the best and unique to choose so that the app lookks good and also easy to explain by me in the viva and please read the instruction carefull as missing out something from it will penalize me very high which i dont want right now so please work on it i have less than 2 hours to do the whole things so please be accurate read the instruction carefully line by line and pleasse act on it carefully and along with then please let me know which topic you are choosing and why and also at the end i need to submit the chat summary in the moodle so please prepare a chat summary along with it so please start work on it and this is my github https://github.com/vishalpatel04/et617-endsem-23B0745
+
+----- CLAUDE (18 Nov 2026, 18:23 IST) -----
+The exam has started, so I'll move fast. First I'll find the assessment document. I don't see an attachment in your message, so I'll check your ET617 folder, recent files and the GitHub repo you gave.
+
+[Tool] Bash: Find the exam document and inspect the GitHub repo
+[Tool] Bash: Extract all text and tables from the exam document
+----- CLAUDE (18 Nov 2026, 18:24 IST) -----
+My text extraction mixed in some formatting markup, so I'll re-extract with a proper XML parser to get clean text.
+
+[Tool] Bash: Re-extract the exam document text with an XML parser
+[Tool] Read: /private/tmp/claude-501/-Users-vishalchandrapatel-Desktop-ET617/ad033cab-b892-4570-8539-58711f323dff/scratchpad/exam.txt
+[Tool] Bash: Create local repo folder from scaffold and link GitHub remote
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/DESIGN.md
+[Tool] Bash: Commit DESIGN.md and push to GitHub
+[Tool] Bash: Check Vercel link options and existing projects
+[Tool] Bash: Create Vercel project et617-23b0745 and deploy placeholder
+[Tool] Bash: Set Vite framework in vercel.json and redeploy
+[Tool] Bash: Commit first deploy, check live URL and icon names
+[Tool] Skill: claude-api
+[Tool] Bash: Install pinned Anthropic SDK and create source folders
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/content.js
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/physics.js
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/storage.js
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/coach.js
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/api/coach.js
+----- CLAUDE (18 Nov 2026, 18:34 IST) -----
+Next, the swinging pendulum (with ruler, protractor and stopwatch) and the shared UI pieces.
+
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/components/ui.jsx
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/components/Pendulum.jsx
+----- CLAUDE (18 Nov 2026, 18:35 IST) -----
+Now the screens, starting with the lab, the core of the app.
+
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/screens/Lab.jsx
+[Tool] Bash: Rename hint function and fix two lab bugs
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/screens/Start.jsx
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/screens/Intro.jsx
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/screens/Predict.jsx
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/screens/Check.jsx
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/screens/Summary.jsx
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/screens/About.jsx
+----- CLAUDE (18 Nov 2026, 18:37 IST) -----
+Now the app shell: session clock, step tracker, "Stop & save", the time-up prompt, and the identity footer on every screen.
+
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/App.jsx
+[Tool] Edit: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/App.jsx
+[Tool] Edit: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/App.jsx
+[Tool] Edit: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/App.jsx
+[Tool] Bash: Add styles and font, then lint and build the app
+----- CLAUDE (18 Nov 2026, 18:38 IST) -----
+The build passes. Lint flagged one warning in the pendulum animation, which I'll fix now. Then I'll commit this working version and deploy it.
+
+[Tool] Edit: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/components/Pendulum.jsx
+[Tool] Bash: Lint, build, commit, push and deploy the app
+[Tool] ToolSearch: select:mcp__plugin_playwright_playwright__browser_click,mcp__plugin_playwright_playwright__browser_type,mcp__plugin_playwright_playwright__browser_evaluate,mcp__plugin_playwright_playwright__browser_snapshot,mcp__plugin_playwright_playwright__browser_wait_for,mcp__plugin_playwrigh
+----- CLAUDE (18 Nov 2026, 18:39 IST) -----
+I'll script both learner paths in a real browser on the live site and save the screenshots into the repo's `report/screens` folder for D5.
+
+[Tool] Bash: Create screenshot folder; check live app and AI endpoint
+[Tool] mcp__plugin_playwright_playwright__browser_run_code_unsafe: browser test script on the live app
+[Tool] Bash: Fix fair-test helper to copy the latest trial, rebuild, redeploy
+----- CLAUDE (18 Nov 2026, 18:41 IST) -----
+Redeployed with the fix. Now rerunning the misconception path. With the helper, Sana changes the mass back to 100 g from trial 2.
+
+[Tool] mcp__plugin_playwright_playwright__browser_run_code_unsafe: browser test script on the live app
+[Tool] Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/b3-hint-ladder.png
+[Tool] Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/b5-fair-mass-vs-misconception.png
+[Tool] Bash: Fix protractor labels and unit spacing, commit, push, deploy
+----- CLAUDE (18 Nov 2026, 18:42 IST) -----
+Deployed. Next I'll capture both paths cleanly: the misconception path again with the header fix, the correct path with learner "Ravi", and the About screen.
+
+[Tool] mcp__plugin_playwright_playwright__browser_run_code_unsafe: browser test script on the live app
+[Tool] Bash: Commit screenshots and locate the chat transcript file
+----- CLAUDE (18 Nov 2026, 18:44 IST) -----
+Next, the report (D1–D8 plus the AI-use log), written as HTML so I can print it to a single PDF with the screenshots embedded.
+
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/report.html
+----- CLAUDE (18 Nov 2026, 18:45 IST) -----
+Next I'll check the numbers in Sana's retaken screenshot so the report matches it exactly, then print the report to PDF.
+
+[Tool] Bash: Check screenshot dimensions for report layout
+[Tool] Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/b5-fair-mass-vs-misconception.png
+----- CLAUDE (18 Nov 2026, 18:45 IST) -----
+The screenshot shows 1.80 s → 1.79 s, the reverse of what I wrote, so I'll correct the report to match and print it to PDF with headless Chrome.
+
+[Tool] Bash: Fix report numbers and print report to PDF
+[Tool] Bash: Export the chat transcript to a readable HTML file
+----- CLAUDE (18 Nov 2026, 18:46 IST) -----
+The chat export is done (66 messages, 131 tool calls, email removed). Now the short **AI chat summary** for Moodle, with the actual commit times pulled from git.
+
+[Tool] Bash: List commit times for the AI summary
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/ai-chat-summary.html
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/README.md
+----- CLAUDE (18 Nov 2026, 18:47 IST) -----
+Next I'll print the summary and the chat export to PDF, commit everything, and push.
+
+[Tool] Bash: Print summary and export PDFs, commit and push
+[Tool] Read: /private/tmp/claude-501/-Users-vishalchandrapatel-Desktop-ET617/ad033cab-b892-4570-8539-58711f323dff/scratchpad/report-p1.png
+[Tool] mcp__plugin_playwright_playwright__browser_run_code_unsafe: browser test script on the live app
+[Tool] Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/c3-time-up-tablet.png
+[Tool] Edit: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/report.html
+[Tool] Bash: Regenerate report PDF, commit and push
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/VIVA-PREP-23B0745.md
+----- CLAUDE (18 Nov 2026, 18:49 IST) -----
+Next, a one-command script that refreshes the chat export (HTML and PDF), so you can rerun it just before submitting and include the latest messages. I'll run it once now.
+
+[Tool] Bash: Create chat-export refresh script, run it, commit and push
+----- CLAUDE (18 Nov 2026, 18:49 IST) -----
+Everything is committed, pushed and live (18:49). I'll add a short note to memory so a new chat during the viva knows where everything is and that viva changes go on a separate branch.
+
+[Tool] Edit: /Users/vishalchandrapatel/.claude/projects/-Users-vishalchandrapatel-Desktop-ET617/memory/et617-exam-plan.md
+----- CLAUDE (18 Nov 2026, 18:49 IST) -----
+The app, report and AI chat files are done, committed and live as of 18:49. Before you submit, you need to do the items below, especially the card disclosure, which is overdue.
+
+**Card I chose: P5-T1-L2-C4** (inquiry-based virtual lab, simple pendulum, first-generation learner at an NGO centre with shared tablets, 10-minute sessions). The pendulum physics is exact, so the lab can't give wrong data. The two misconceptions ("a heavier bob swings faster", "a bigger push takes longer") are easy to show and explain. The stopwatch, ruler, protractor, data table and graph match the rubric's "topic-specific tools". C4 fits shared tablets. It also differs from the example card (photosynthesis).
+
+## Exam checkpoints
+
+| Requirement | Status |
+|---|---|
+| Repo created after the exam started | ✅ |
+| DESIGN.md by 0:30 (18:30) | ✅ 18:27 |
+| First deployment by 1:00 (19:00) | ✅ 18:28 |
+| Commits every 30 min | ✅ 8 commits, 18:27–18:49 |
+| Live at et617-23b0745.vercel.app | ✅ https://et617-23b0745.vercel.app |
+| At least 5 connected screens, C4 visible, 23B0745 on every screen and on About | ✅ |
+| Both learner scenarios run on the live app, with screenshots in the report | ✅ |
+| Report: Identity card, D1–D8, AI-use log, in template order | ✅ 13-page PDF |
+| No API key committed | ✅ |
+
+I tested both learner paths on the live site. During testing I found and fixed one bug: the fair-test helper was comparing the wrong pair of trials.
+
+**The AI coach is running in fallback mode.** No API key is set, so the app uses a clearly labelled rule-based coach. The rules allow this, and the report explains it in D6. If you have an Anthropic key, add it in Vercel → **et617-23b0745** → Settings → Environment Variables as `ANTHROPIC_API_KEY`, then tell me. Never paste the key into this chat.
+
+## What only you can do
+
+1. **Disclose your card in the Moodle Excel sheet now:** 23B0745, P5, P5-T1, L2, C4. It was due by 18:10.
+2. **Take a screenshot of your exam card.** It's on the Moodle checklist.
+3. **Read the report PDF, especially the "AI-use log and reflection" section, and put it in your own words.** I drafted it in first person. Keep only the claims that are true for you, for example "What I checked myself".
+4. **Upload to Moodle:**
+   - Live app URL: `https://et617-23b0745.vercel.app`
+   - Repo link: `https://github.com/vishalpatel04/et617-endsem-23B0745`
+   - Report PDF: `et617-endsem-23B0745/report/ET617-EndSem-23B0745-Report.pdf`
+   - AI chat files: `report/ai-chat-export.pdf` (the full chat) and `report/ai-chat-summary.pdf` (the chat summary you asked for)
+   - Your exam-card screenshot
+5. **Just before submitting,** run `~/Desktop/ET617/update-chat-export.sh` so the chat export includes the latest messages. You can also ask me to run it and commit.
+
+## Viva (2:00–3:00)
+
+Open **`~/Desktop/ET617/VIVA-PREP-23B0745.md`**. It has:
+- a click-by-click script for the correct path and the misconception path
+- answers to likely "why" questions
+- a table showing which file to edit for each likely change request
+
+**Rule for the live change request:** the submitted app and repo are frozen. Run `git checkout -b viva` first, and deploy with `vercel deploy` (preview only), never `--prod`. I can make the change with you during the viva.
+
+----- STUDENT (18 Nov 2026, 19:01 IST) -----
+and can you add more features in to the app for the better understanding of this topic as for now it is looking too simple as of now i want you to add a more better learning feature to teach the students like increase the angle make then visualize in 3D type of things
+[1 screenshot(s) attached]
+
+----- CLAUDE (18 Nov 2026, 19:03 IST) -----
+Your screenshot shows two problems:
+- **"yes it is" got a vague reply.** "Yes" means "a heavier bob does change the period", which is exactly misconception M1, so the coach should say so. I'll teach it yes/no (plus *haan*/*nahi*).
+- **The lab feels too simple.** I'll add three learning features, each tied to a misconception:
+  1. **3D view** of the pendulum with a stand, a floor shadow and a "turn the view" slider, as you asked. A dashed **swing path** and a live **speed bar** show *why* a bigger angle doesn't change the time: the bob goes further but faster (this targets M2).
+  2. **"Race two pendulums"**: two pendulums swing side by side (light vs heavy, small vs big push, short vs long string). The learner predicts the winner first, then watches. The same period means they stay in step; a longer string falls behind. This makes M1 and M2 visible.
+  3. A **"Where you see this"** card (playground swing, pendulum clock) that links the idea to real life.
+
+It's 18:5x. I'll finish features by ~19:20, then update the report and screenshots, leaving enough margin before Moodle closes. First I'll read the current pendulum file.
+
+[Tool] Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/components/Pendulum.jsx
+----- CLAUDE (18 Nov 2026, 19:04 IST) -----
+I'll start with the content for the new features: race presets and the real-life examples.
+
+[Tool] Bash: Add race presets and real-life examples to content
+----- CLAUDE (18 Nov 2026, 19:04 IST) -----
+It's 19:04, so about 25 minutes for the features. Writing the 3D scene and the race component now.
+
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/components/Scene3D.jsx
+[Tool] Write: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/src/components/RacePendulums.jsx
+----- CLAUDE (18 Nov 2026, 19:05 IST) -----
+Next, wiring them in: the 2D/3D switch, swing path and speed bar on the pendulum; tabs in the lab; the yes/no fix in the coach; and the real-life card in Wrap-up.
+
+[Tool] Bash: Wire in 3D view, race tab, speed bar, coach fix, real-life card; lint and build
+----- CLAUDE (18 Nov 2026, 19:05 IST) -----
+Lint is clean and the build passes. I'll commit and deploy, then test the new features in the browser.
+
+[Tool] Bash: Commit new features, push and deploy
+[Tool] mcp__plugin_playwright_playwright__browser_run_code_unsafe: browser test script on the live app
+[Tool] Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/e1-3d-view-running.png
+[Tool] Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/e4-race-length-result.png
+[Tool] Bash: Update report and summary, regenerate PDFs and export, commit
+----- CLAUDE (18 Nov 2026, 19:07 IST) -----
+The report, summary and chat export now include the new features, committed at 19:07. Last, I'll add the new features to your viva notes.
+
+[Tool] Bash: Add new features to the viva prep notes
+----- CLAUDE (18 Nov 2026, 19:07 IST) -----
+I've added the new learning features and fixed the "yes it is" problem. I tested everything on https://et617-23b0745.vercel.app with no page errors, and the report and chat files are updated (last commit 19:07).
+
+**The coach now reads yes/no answers.** "yes it is" now gets the M1 reply, because "yes" to "does a heavier bob change the period?" is misconception M1. It also handles *haan* and *nahi*.
+
+**New features in the lab:**
+
+| Feature | How it helps understanding | Tested result |
+|---|---|---|
+| **3D view** with a "Turn the view" slider | A perspective stand with a floor grid and moving shadow, so learners can picture a real lab set-up. 2D stays for the ruler and protractor. | Renders and turns while the pendulum swings |
+| **Swing path + live speed bar** (2D and 3D) | Shows *why* angle doesn't matter (M2): 10° gives a 35 cm path at 0.39 m/s, 20° gives 70 cm at 0.77 m/s, so the time stays the same | Updates live during a run |
+| **Race two pendulums** (new Lab tab) | Learner predicts the winner, then watches two pendulums that differ in only one thing (light vs heavy, small vs big push, short vs long string) | Light vs heavy: together, 14.2 s each. 25 cm vs 100 cm: 10.0 s vs 20.1 s |
+| **Where you see this** (Wrap-up) | Links to the playground jhoola, pendulum clocks and a 25 cm thread at home | Shown on the summary |
+
+The report now covers these in D3 (a race task, so 8 tasks), D4 (two new rows in the screen map, plus 3D and race screenshots) and D7 (why each feature helps). The AI log notes that you tested the app, found the coach problem and asked for the features. The chat summary, chat export and viva notes are updated too.
+
+## Before Moodle closes
+
+1. **Disclose your card in the Moodle Excel sheet** if you haven't yet (P5 / P5-T1 / L2 / C4 / 23B0745), and **take a screenshot of the card**.
+2. **Read the report's AI-use reflection and put it in your own words.** Keep only what's true for you.
+3. **Just before submitting, run `~/Desktop/ET617/update-chat-export.sh`** so the export includes the latest messages.
+4. **Upload to Moodle:**
+   - Live app URL: https://et617-23b0745.vercel.app
+   - Repo: https://github.com/vishalpatel04/et617-endsem-23B0745
+   - Report: `et617-endsem-23B0745/report/ET617-EndSem-23B0745-Report.pdf`
+   - AI chat files: `report/ai-chat-export.pdf` and `report/ai-chat-summary.pdf`
+   - Your exam-card screenshot
+
+Please don't ask for more features now. Every change needs retesting and a report update, and Moodle closes at 20:00. Save new ideas for the viva change request, on the `viva` branch (`git checkout -b viva`, then `vercel deploy` without `--prod`). Your walkthrough script and "why" answers are in `~/Desktop/ET617/VIVA-PREP-23B0745.md`.
+
+----- STUDENT (18 Nov 2026, 19:16 IST) -----
+why in this part the time still is running continusly like for me it will stop here and what is the image 3 how it will tick all the parts? will in the image 4 the AI will not ans it? and how to do with the things if the time exceed 10 min as it is a 10 min session so what features to add in this so that a user properly do all the work in 10mins  and in the last image can you add some image in the backgroud that is reffering to my teaching topic
+[7 screenshot(s) attached]
+
+----- CLAUDE (18 Nov 2026, 19:17 IST) -----
+Your questions first, then the fixes:
+
+1. **Clock still running on Wrap-up:** that's a bug. The activity ends at Wrap-up, so the clock should stop there. I'll fix it.
+2. **How the three ticks work:** each outcome is ticked only from evidence. Tick 2 needs at least 2 fair tests *and* Check Task 2 right. Tick 3 needs Task 1 right (≈1.0 s) *and* an explanation that uses your data. You answered 0.5, A and "yes it is", so only tick 1 appeared. I'll make the summary show **what's missing for each tick**, with a button that takes you back to fix it.
+3. **Why the AI didn't answer:** it can't run because no API key is set in Vercel, so the labelled rule-based fallback answered (the "Offline coach" line says this). The exam rules allow it. A real AI reply needs an Anthropic API key added in Vercel; tell me if you have one.
+4. **Going over 10 minutes:** I'll add pacing features. The header will show **"Time left"** counting down, plus a **per-step budget**. When a step's time is used up, a "move on" nudge appears with **"Go to next step"** or **"1 more minute"**.
+5. **Topic image on the start screen:** I'll add a **playground jhoola illustration that swings**, with a short line linking it to the lab.
+
+I'll make the changes now and keep them small so there's still time for the report.
+
+[Tool] Bash: Check time and locate clock code in App
+----- CLAUDE (18 Nov 2026, 19:17 IST) -----
+It's 19:17, so I'm doing all five fixes in one pass, then testing and deploying.
+
+[Tool] Bash: Add clock stop, pacing, summary guidance and jhoola art; lint and build
+----- CLAUDE (18 Nov 2026, 19:18 IST) -----
+Lint and build are clean, and 2.8 s is right for 2 m ropes: T = 2π√(2/9.81) ≈ 2.84 s. I'll switch one gradient class to Tailwind v4's current name, then commit and deploy.
+
+[Tool] Bash: Fix gradient class, build, commit, push and deploy
+[Tool] mcp__plugin_playwright_playwright__browser_run_code_unsafe: browser test script on the live app
+[Tool] Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/f1-start-jhoola.png
+----- CLAUDE (18 Nov 2026, 19:19 IST) -----
+The swinging jhoola illustration looks good. It's 19:20, so I'll put these changes into the report and AI summary, regenerate the PDFs and the chat export, and commit.
+
+[Tool] Bash: Update report and summary, regenerate PDFs and export, commit
+----- CLAUDE (18 Nov 2026, 19:20 IST) -----
+Done and committed at 19:20. I'll add the new pacing features to your viva notes.
+
+[Tool] Bash: Add pacing features to the viva prep notes
+----- CLAUDE (18 Nov 2026, 19:20 IST) -----
+I've fixed everything from your screenshots. The changes are live at https://et617-23b0745.vercel.app, tested with no page errors, and committed at 19:20 with the report and chat files updated.
+
+**1. Clock running on Wrap-up (images 1–2):** this was a bug, and it's fixed. The clock now stops when you reach Wrap-up and shows "Done in 07:03"; I checked it stays still.
+
+**2. How all three ticks work (image 3):** a tick appears only when the evidence is there:
+- **Tick 1:** all 3 predictions made, plus a fair test of mass, angle and length.
+- **Tick 2:** at least 2 fair tests, and Check Task 2 right (the pair where only one thing changes).
+- **Tick 3:** Task 1 right (about 1.0 s), and the coach marks your Task 3 explanation correct.
+
+You answered 0.5, A and "yes it is", so only tick 1 appeared. Each missing tick now says **"To tick this: …"** with a button straight back to the right step.
+
+**3. Why the AI didn't answer (image 4):** the real AI needs an Anthropic API key in Vercel, and none is set, so the labelled rule-based coach replied. That is the "Offline coach" line, and the exam rules allow it ("a clearly labelled fallback… is acceptable"); the report's D6 describes the real AI behaviour. If you have a key, add it in Vercel → et617-23b0745 → Settings → Environment Variables as `ANTHROPIC_API_KEY` and tell me. Don't paste it here.
+
+**4. Finishing within 10 minutes (images 5–6):**
+- The header counts **down** ("06:48 left") and shows the **budget for the current step** ("Experiment: 01:20 of 5 min left").
+- When a step's time runs out, a **move-on nudge** appears: "You planned 5 min for Experiment. Move on to Check…" with **Go to Check** or **1 more minute**.
+- At 10:00 the learner can **Stop & save** and continue next time from the same step, or choose **Finish this step first**.
+
+**5. Topic image (image 7):** the start screen now has a **playground jhoola illustration whose seat really swings**, with the hook "A jhoola with 2 m ropes takes about 2.8 seconds for one full swing, whoever sits on it. Why? Let's find out." The physics checks out: T = 2π√(2/9.81) ≈ 2.84 s.
+
+## Stop adding features now (it's 19:20; Moodle closes at 20:00)
+
+1. Disclose your card in the Moodle Excel sheet if you haven't (P5 / P5-T1 / L2 / C4 / 23B0745), and **take a screenshot of the card**.
+2. Read the report's **AI-use reflection** and put it in your own words.
+3. At about **19:50**, run `~/Desktop/ET617/update-chat-export.sh` so the export includes everything.
+4. **Submit by 19:55:**
+   - Live app URL: https://et617-23b0745.vercel.app
+   - Repo: https://github.com/vishalpatel04/et617-endsem-23B0745
+   - Report: `report/ET617-EndSem-23B0745-Report.pdf`
+   - AI chat files: `report/ai-chat-export.pdf` and `report/ai-chat-summary.pdf`
+   - Your exam-card screenshot
+
+For the viva, use `~/Desktop/ET617/VIVA-PREP-23B0745.md`, which now also covers the pacing features and how the ticks work. Make any live change on a `viva` branch and deploy it with `vercel deploy`, never `--prod`.
+
+----- STUDENT (18 Nov 2026, 19:24 IST) -----
+hey after my first submit when the time stop and when i again returning to the same user the time not continue to start from that point which i dont want
+[1 screenshot(s) attached]
+
+----- CLAUDE (18 Nov 2026, 19:24 IST) -----
+The clock now stops whenever a learner has finished (`completedAt`), even after they come back and keep working. It should stop **only on the Wrap-up screen**. Anywhere else, including after a finished learner returns to Experiment or Check, it should continue from the saved time (02:00 in your case). That's a one-line fix, which I'll make and test now.
+
+[Tool] Bash: Make the clock stop only on Wrap-up; lint and build
+[Tool] Bash: Remove unused variable, rebuild, commit, push, deploy
+----- CLAUDE (18 Nov 2026, 19:25 IST) -----
+Deployed. Next I'll test your exact case: a learner finishes, comes back, opens Experiment, and the clock should continue from the saved time.
+
+[Tool] mcp__plugin_playwright_playwright__browser_run_code_unsafe: browser test script on the live app
+[Tool] Bash: Refresh chat export, commit and push
+----- CLAUDE (18 Nov 2026, 19:25 IST) -----
+The clock now continues from the saved time when a learner comes back, even after "Finish and save". It stops only while the learner is on the Wrap-up screen. I tested your exact case on the live site: Wrap-up showed "Done in 02:00", and back in Experiment it read "08:00 left", then "07:57 left" three seconds later. The fix is deployed and committed (19:25), and the chat export is refreshed. The report doesn't need changing; it already says the clock stops at Wrap-up.
+
+**It's 19:25. Please stop making changes now and submit:**
+1. Disclose your card in the Moodle Excel sheet if you haven't (P5 / P5-T1 / L2 / C4 / 23B0745), and take a screenshot of the card.
+2. Read the report's AI-use reflection and put it in your own words.
+3. At about 19:50, run `~/Desktop/ET617/update-chat-export.sh` so the export includes these last messages.
+4. Upload to Moodle before 19:55:
+   - Live app URL: https://et617-23b0745.vercel.app
+   - Repo: https://github.com/vishalpatel04/et617-endsem-23B0745
+   - Report: `report/ET617-EndSem-23B0745-Report.pdf`
+   - AI chat files: `report/ai-chat-export.pdf` and `report/ai-chat-summary.pdf`
+   - Your exam-card screenshot
+
+If the examiner asks for a change during the viva, run `git checkout -b viva` first and deploy with `vercel deploy`, never `--prod`.
+
+----- STUDENT (18 Nov 2026, 19:29 IST) -----
+why only period vs length plot
+[1 screenshot(s) attached]
+
+----- CLAUDE (18 Nov 2026, 19:29 IST) -----
+It was only length because length is the one variable that changes the period, so the graph was built to show its curve: the period grows, but more slowly than the length. You're right, though. Plotting period against **mass** and **angle** is strong evidence too: those points form a **flat line**, which shows M1 and M2 are wrong at a glance. I'll add a "Plot period against: Length | Mass | Angle" switch with a one-line reading hint. It's a small, low-risk change.
+
+[Tool] Bash: Add graph axis switch, lint, build, commit, deploy
+----- CLAUDE (18 Nov 2026, 19:30 IST) -----
+Deployed at 19:30. Next I'll test it: run mass trials, switch the graph to "mass", and check that the flat line appears.
+
+[Tool] mcp__plugin_playwright_playwright__browser_run_code_unsafe: browser test script on the live app
+[Tool] Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/g1-graph-period-vs-mass.png
+[Tool] mcp__plugin_playwright_playwright__browser_run_code_unsafe: browser test script on the live app
+----- CLAUDE (18 Nov 2026, 19:31 IST) -----
+Confirmed: it was the animation. After it settles, the points sit evenly spaced at 100, 300 and 500 g. I'll check the final screenshot.
+
+[Tool] Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/g1-graph-period-vs-mass.png
+----- CLAUDE (18 Nov 2026, 19:31 IST) -----
+The graph switch works: 100 g, 300 g and 500 g all sit at 1.42 s, a flat line that shows mass doesn't matter. I'll add it to the report, regenerate the PDF and export, and commit.
+
+[Tool] Bash: Update report for graph switch, regenerate PDF and export, commit
+[Tool] Bash: Add graph switch to viva notes
+----- CLAUDE (18 Nov 2026, 19:31 IST) -----
+The graph only plotted length because length is the one variable that changes the period, and it was built to show that curve. Mass and angle are worth plotting too, because a flat line shows "no effect" at a glance. So I added a **Length | Mass | Angle** switch to the graph.
+
+I tested it on the live site. With 100 g, 300 g and 500 g, all three points sit at 1.42 s: a flat line, which is visual evidence against "heavier swings faster" (M1). For length the points rise and bend, because the period grows more slowly than the length. Each view has a one-line "How to read it" hint, without giving away the answer. The points glide into place for about half a second when you switch axes.
+
+The change is live and committed (19:31). The report now covers the graph in D3 and D7 and has a screenshot, and the chat export and viva notes are updated.
+
+**It's 19:31. Please stop changes now and submit before 19:55.**
+1. Disclose your card in the Moodle Excel sheet if you haven't (P5 / P5-T1 / L2 / C4 / 23B0745), and take a screenshot of the card.
+2. Put the report's AI-use reflection in your own words.
+3. At about 19:50, run `~/Desktop/ET617/update-chat-export.sh`.
+4. Upload to Moodle:
+   - Live app URL: https://et617-23b0745.vercel.app
+   - Repo: https://github.com/vishalpatel04/et617-endsem-23B0745
+   - Report: `report/ET617-EndSem-23B0745-Report.pdf`
+   - AI chat files: `report/ai-chat-export.pdf` and `report/ai-chat-summary.pdf`
+   - Your exam-card screenshot
+
+----- STUDENT (18 Nov 2026, 19:35 IST) -----
+what is this?
+[1 screenshot(s) attached]
+
+----- CLAUDE (18 Nov 2026, 19:35 IST) -----
+It's the **speed meter**, under the pendulum. It explains *why* a bigger pull doesn't change the time.
+
+- **"Speed now"** is how fast the bob is moving at this moment. It shows **0.00 m/s** because nothing is running and the bob is held at its starting point. Press **Run 10 swings** and the bar fills as the bob speeds up through the bottom of the swing and empties at each end.
+- **"Dashed line: the path"** refers to the dashed curve drawn on the pendulum: the arc the bob travels.
+- **"One full swing travels about 70 cm"** is the distance for one complete there-and-back swing. With a 50 cm string pulled back 20°, that's 4 × 50 cm × 0.35 ≈ 70 cm.
+- **"Top speed 0.77 m/s"** is the fastest the bob goes, at the bottom of the swing.
+
+**Why it's there (misconception M2, "a bigger pull takes longer"):** compare two starting angles on the same 50 cm string.
+
+| Starting angle | Path per swing | Top speed | Period |
+|---|---|---|---|
+| 10° | 35 cm | 0.39 m/s | 1.42 s |
+| 20° | 70 cm | 0.77 m/s | 1.42 s |
+
+Doubling the angle doubles the distance but also doubles the speed, so the time for one swing stays the same.
+
+**What to say in the viva:** "A bigger pull means a longer path, but the bob also moves faster. The two balance out, so the period stays the same. The speed meter lets the learner see both at once."
+
+It's 19:32, so please go ahead with the Moodle submission.
+
+----- STUDENT (18 Nov 2026, 19:36 IST) -----
+now do the final check that are all thing working fine as i need to push this and submit all the requirements
+
+----- CLAUDE (18 Nov 2026, 19:36 IST) -----
+I'll run the final pre-submission check: the repo, the live deployment, a full end-to-end test on the live app, and the submission files. First the repo, the deployment and the files.
+
+[Tool] Bash: Check repo, secrets, build, files, report, live deployment
+[Tool] mcp__plugin_playwright_playwright__browser_run_code_unsafe: browser test script on the live app
+----- CLAUDE (18 Nov 2026, 19:38 IST) -----
+You've hit your 5-hour limit · resets 10:10pm (Asia/Calcutta)
+
+----- STUDENT (18 Nov 2026, 19:40 IST) -----
+do it again and check all things properly and the files report all the things the report formatting also give me the things which i must need to know before my viva begins
+
+[Tool] mcp__plugin_playwright_playwright__browser_run_code_unsafe: browser test script on the live app
+[Tool] Bash: Render every report PDF page to images for a format check
+[Tool] Read: /private/tmp/claude-501/-Users-vishalchandrapatel-Desktop-ET617/ad033cab-b892-4570-8539-58711f323dff/scratchpad/report-sheet.png
+[Tool] Bash: Fix two page breaks, regenerate report PDF and page images
+[Tool] Read: /private/tmp/claude-501/-Users-vishalchandrapatel-Desktop-ET617/ad033cab-b892-4570-8539-58711f323dff/scratchpad/report-sheet.png
+[Tool] Bash: Refresh export, commit, push and confirm final state
+----- CLAUDE (18 Nov 2026, 19:42 IST) -----
+The final check passed, and everything is committed (`c486054`, the same on GitHub) and live.
+
+## What I checked
+
+| Area | Result |
+|---|---|
+| **Live app**, full test of both paths and every feature | ✅ 24 of 24 checks passed, zero page errors |
+| Identity token on every screen | ✅ Footer on all 8 screens, plus the About heading |
+| Correct path (Ravi) | ✅ Fair tests match his predictions, all Check tasks correct, all 3 outcomes ticked, clock stops at Wrap-up |
+| Misconception path (Sana) | ✅ Mass tested first (adaptivity); unfair test caught; 3-level hints; helper locks sliders; M1 feedback; "My data changed my idea"; 0.5 s feedback; "yes it is" flagged as M1 |
+| 3D view, race, graph switch, stop & save, resume | ✅ |
+| **Repo** | ✅ Public, 18 commits from 18:27 (DESIGN.md) to 19:42, no API keys or `.env` files committed, lint and build clean |
+| **Report PDF** (17 pages) | ✅ Headings in template order: Identity card, D1–D8, AI-use log and reflection. I fixed two layout issues: the feedback table no longer splits across pages, and the near-empty page is gone |
+| **Chat files** | ✅ Export (17 pages) and summary (2 pages) are fresh; your email isn't in them |
+
+The 2 console errors in the test are the intended "AI not set up" replies, which switch on the labelled offline coach.
+
+## Submit now (by 19:55)
+
+1. **Exam card:** disclose it in the Moodle Excel sheet (P5 / P5-T1 / L2 / C4 / 23B0745) and **take a screenshot**. Only you can do this.
+2. **Reflection:** read the report's "AI-use log and reflection" section and keep only what's true for you.
+3. **Upload to Moodle:**
+   - App: `https://et617-23b0745.vercel.app`
+   - Repo: `https://github.com/vishalpatel04/et617-endsem-23B0745`
+   - Report: `~/Desktop/ET617/et617-endsem-23B0745/report/ET617-EndSem-23B0745-Report.pdf`
+   - AI chat files: `report/ai-chat-export.pdf` and `report/ai-chat-summary.pdf`
+   - Your exam-card screenshot
+
+## What you need to know before the viva
+
+**The viva has three parts:** a walkthrough of both learner paths on the live app, a live change request, and one "why" question.
+
+**Your 30-second pitch:** "My card is P5 virtual lab, the simple pendulum, an NGO learner on shared tablets, and 10-minute sessions. In Jhoola Lab, Sana predicts, runs fair tests changing length, mass and angle, and changes her idea based on her own data, all in one 10-minute turn that she can stop and resume."
+
+**Persona:** Sana, 14, Class 9, NGO centre in Mumbai, shared tablet, speaks Hindi at home. **M1:** "heavier swings faster". **M2:** "bigger push takes longer".
+
+**Numbers to remember:**
+- T = 2π√(L/g), valid for small angles (the app allows 5–20°).
+- 25 cm gives 1.00 s, 50 cm gives 1.42 s, 100 cm gives 2.01 s. Four times the length gives twice the period.
+- The app times 10 swings and divides by 10 to reduce reaction-time error.
+
+**Walkthrough** (use fresh names, because the examiner's browser starts empty):
+- **Correct path:** predict "same, same, more" → change one thing per trial → 1.0 → pair C → an explanation that uses your numbers → three ticks.
+- **Misconception path:** predict "heavier swings faster" → change mass and length together → **"Not a fair test yet"** → hints 1–3 → "Test only the mass" → M1 feedback → "My data changed my idea" → Stop & save → resume.
+
+**Design challenge** (an unsuccessful experiment, without giving the answer): the app says *what* changed, never *which variable matters*. The hints rebuild the method (choose one variable, compare the rows, use the helper). The physics is explained only after her own fair test shows it.
+
+**If asked about the AI:** the Lab coach is Claude, called through `/api/coach`. Its reply is checked for a valid JSON label, a length limit and answer give-away, and cross-checked with rules. "Offline coach" appears because no API key is set in Vercel. That labelled fallback is allowed by the rules and described in D6. The simulation itself uses no AI, so the data is always correct.
+
+**C4 (10-minute sessions):** countdown, per-step time budgets with move-on nudges, Stop & save, name-based resume, and the clock stops at Wrap-up.
+
+**Adaptivity:** predictions set the experiment order; wrong answers trigger targeted feedback; a second unfair test jumps straight to the helper.
+
+**For the live change request:** run `git checkout -b viva` **first**, edit, then use `npm run dev` or `vercel deploy`, **never `--prod`**. Most text changes go in `src/content.js`; physics is in `src/physics.js`; the lab is in `src/screens/Lab.jsx`.
+
+The full script, answers and file guide are in **`~/Desktop/ET617/VIVA-PREP-23B0745.md`**. Open it before your slot. Good luck!
+
+----- STUDENT (18 Nov 2026, 19:43 IST) -----
+why the time is different?
+[1 screenshot(s) attached]
+
+----- CLAUDE (18 Nov 2026, 19:43 IST) -----
+The difference is **deliberate**. It's a simulated **stopwatch error**, just like timing a real pendulum by hand.
+
+- The true period for a 75 cm string is T = 2π√(0.75/9.81) = **1.737 s**, so 10 swings should take **17.37 s**.
+- A real person starts and stops a stopwatch a little late or early. The app adds a small random error of up to **±0.08 s** to each 10-swing timing.
+- Your two timings, **17.30 s** and **17.38 s**, are both within that error of 17.37 s. Divided by 10, that's **1.73 s** and **1.74 s**.
+
+**Why it's built in (the teaching reason):**
+1. **It's why we time 10 swings and divide by 10.** The ±0.08 s error shrinks to ±0.008 s per swing, the method from the Start screen.
+2. **It teaches that tiny differences aren't real effects.** Any change smaller than 0.03 s is labelled *"about the same (the difference is smaller than stopwatch error)"*. So when the mass changes and the period moves from 1.42 to 1.43 s, Sana learns that mass made no real difference.
+3. **Repeating a trial checks your timing.** The app says exactly that when the settings are unchanged.
+
+**If asked in the viva:** "The variation is intentional. Real measurements always vary a little, so the app adds a small stopwatch error. Learners see why we time 10 swings, and they learn not to read a 0.01-second difference as a real effect."
+
+**If the examiner asks you to remove it** (a likely live change): on the `viva` branch, change `0.16` to `0` in `measureTenSwings` in `src/physics.js`. Every repeat trial then gives exactly the same time.
+
+It's 19:44, so please submit on Moodle now.
+
+----- STUDENT (18 Nov 2026, 19:48 IST) -----
+Copy paste entire chat logs in .txt file and submit here (no other file format will be accepted)
+
+----- CLAUDE (18 Nov 2026, 19:49 IST) -----
+I'll create a plain-text (.txt) log of this entire chat, in order: every message from you and from Claude, with each tool action listed on one line. System notes are stripped out and your email address is removed.
+
+[Tool] Bash: Export the full chat log to a plain .txt file
+
+====================================================================================================
+End of log. Student messages: 20. Claude messages: 87. Tool actions: 182.
