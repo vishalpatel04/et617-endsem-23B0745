@@ -558,4 +558,54 @@ It&#x27;s 18:5x. I&#x27;ll finish features by ~19:20, then update the report and
 <div class="row tool">⚙ Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/e1-3d-view-running.png</div>
 <div class="row tool">⚙ Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/e4-race-length-result.png</div>
 <div class="row tool">⚙ Bash: Update report and summary, regenerate PDFs and export, commit</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:07 IST</div>The report, summary and chat export now include the new features, committed at 19:07. Last, I&#x27;ll add the new features to your viva notes.</div>
+<div class="row tool">⚙ Bash: Add new features to the viva prep notes</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:07 IST</div>I&#x27;ve added the new learning features and fixed the &quot;yes it is&quot; problem. I tested everything on https://et617-23b0745.vercel.app with no page errors, and the report and chat files are updated (last commit 19:07).
+
+**The coach now reads yes/no answers.** &quot;yes it is&quot; now gets the M1 reply, because &quot;yes&quot; to &quot;does a heavier bob change the period?&quot; is misconception M1. It also handles *haan* and *nahi*.
+
+**New features in the lab:**
+
+| Feature | How it helps understanding | Tested result |
+|---|---|---|
+| **3D view** with a &quot;Turn the view&quot; slider | A perspective stand with a floor grid and moving shadow, so learners can picture a real lab set-up. 2D stays for the ruler and protractor. | Renders and turns while the pendulum swings |
+| **Swing path + live speed bar** (2D and 3D) | Shows *why* angle doesn&#x27;t matter (M2): 10° gives a 35 cm path at 0.39 m/s, 20° gives 70 cm at 0.77 m/s, so the time stays the same | Updates live during a run |
+| **Race two pendulums** (new Lab tab) | Learner predicts the winner, then watches two pendulums that differ in only one thing (light vs heavy, small vs big push, short vs long string) | Light vs heavy: together, 14.2 s each. 25 cm vs 100 cm: 10.0 s vs 20.1 s |
+| **Where you see this** (Wrap-up) | Links to the playground jhoola, pendulum clocks and a 25 cm thread at home | Shown on the summary |
+
+The report now covers these in D3 (a race task, so 8 tasks), D4 (two new rows in the screen map, plus 3D and race screenshots) and D7 (why each feature helps). The AI log notes that you tested the app, found the coach problem and asked for the features. The chat summary, chat export and viva notes are updated too.
+
+## Before Moodle closes
+
+1. **Disclose your card in the Moodle Excel sheet** if you haven&#x27;t yet (P5 / P5-T1 / L2 / C4 / 23B0745), and **take a screenshot of the card**.
+2. **Read the report&#x27;s AI-use reflection and put it in your own words.** Keep only what&#x27;s true for you.
+3. **Just before submitting, run `~/Desktop/ET617/update-chat-export.sh`** so the export includes the latest messages.
+4. **Upload to Moodle:**
+   - Live app URL: https://et617-23b0745.vercel.app
+   - Repo: https://github.com/vishalpatel04/et617-endsem-23B0745
+   - Report: `et617-endsem-23B0745/report/ET617-EndSem-23B0745-Report.pdf`
+   - AI chat files: `report/ai-chat-export.pdf` and `report/ai-chat-summary.pdf`
+   - Your exam-card screenshot
+
+Please don&#x27;t ask for more features now. Every change needs retesting and a report update, and Moodle closes at 20:00. Save new ideas for the viva change request, on the `viva` branch (`git checkout -b viva`, then `vercel deploy` without `--prod`). Your walkthrough script and &quot;why&quot; answers are in `~/Desktop/ET617/VIVA-PREP-23B0745.md`.</div>
+<div class="row user"><div class="who">You (student) · 18 Nov 19:16 IST</div>why in this part the time still is running continusly like for me it will stop here and what is the image 3 how it will tick all the parts? will in the image 4 the AI will not ans it? and how to do with the things if the time exceed 10 min as it is a 10 min session so what features to add in this so that a user properly do all the work in 10mins  and in the last image can you add some image in the backgroud that is reffering to my teaching topic
+[7 screenshot(s) attached]</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:17 IST</div>Your questions first, then the fixes:
+
+1. **Clock still running on Wrap-up:** that&#x27;s a bug. The activity ends at Wrap-up, so the clock should stop there. I&#x27;ll fix it.
+2. **How the three ticks work:** each outcome is ticked only from evidence. Tick 2 needs at least 2 fair tests *and* Check Task 2 right. Tick 3 needs Task 1 right (≈1.0 s) *and* an explanation that uses your data. You answered 0.5, A and &quot;yes it is&quot;, so only tick 1 appeared. I&#x27;ll make the summary show **what&#x27;s missing for each tick**, with a button that takes you back to fix it.
+3. **Why the AI didn&#x27;t answer:** it can&#x27;t run because no API key is set in Vercel, so the labelled rule-based fallback answered (the &quot;Offline coach&quot; line says this). The exam rules allow it. A real AI reply needs an Anthropic API key added in Vercel; tell me if you have one.
+4. **Going over 10 minutes:** I&#x27;ll add pacing features. The header will show **&quot;Time left&quot;** counting down, plus a **per-step budget**. When a step&#x27;s time is used up, a &quot;move on&quot; nudge appears with **&quot;Go to next step&quot;** or **&quot;1 more minute&quot;**.
+5. **Topic image on the start screen:** I&#x27;ll add a **playground jhoola illustration that swings**, with a short line linking it to the lab.
+
+I&#x27;ll make the changes now and keep them small so there&#x27;s still time for the report.</div>
+<div class="row tool">⚙ Bash: Check time and locate clock code in App</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:17 IST</div>It&#x27;s 19:17, so I&#x27;m doing all five fixes in one pass, then testing and deploying.</div>
+<div class="row tool">⚙ Bash: Add clock stop, pacing, summary guidance and jhoola art; lint and build</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:18 IST</div>Lint and build are clean, and 2.8 s is right for 2 m ropes: T = 2π√(2/9.81) ≈ 2.84 s. I&#x27;ll switch one gradient class to Tailwind v4&#x27;s current name, then commit and deploy.</div>
+<div class="row tool">⚙ Bash: Fix gradient class, build, commit, push and deploy</div>
+<div class="row tool">⚙ mcp__plugin_playwright_playwright__browser_run_code_unsafe: </div>
+<div class="row tool">⚙ Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/f1-start-jhoola.png</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:19 IST</div>The swinging jhoola illustration looks good. It&#x27;s 19:20, so I&#x27;ll put these changes into the report and AI summary, regenerate the PDFs and the chat export, and commit.</div>
+<div class="row tool">⚙ Bash: Update report and summary, regenerate PDFs and export, commit</div>
 </body></html>

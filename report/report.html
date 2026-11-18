@@ -119,7 +119,9 @@
 </table>
 <h3>How constraint C4 (10-minute sessions) is visible</h3>
 <ul>
-  <li>A session clock in the header ("03:12 / 10:00") with a progress bar, and a five-step tracker with a minute budget per step on the plan.</li>
+  <li>A countdown in the header ("06:48 left") with a progress bar, a five-step tracker, and a <b>per-step time budget</b> from the 10-minute plan ("Experiment: 01:20 of 5 min left").</li>
+  <li><b>Move-on nudge:</b> when a step's budget is used, a banner says "You planned 5 min for Experiment. Move on to Check so you finish in 10 minutes", with "Go to Check" and "1 more minute". In Predict it says "First ideas are fine".</li>
+  <li>The clock <b>stops at Wrap-up</b> ("Done in 07:03"), because the learning sequence is complete there.</li>
   <li>"Stop &amp; save" on every step; every action is saved immediately under the learner's name on the shared tablet.</li>
   <li>Picking your name resumes at the saved step with your trials, predictions and answers ("Welcome back, Sana! You are continuing from Experiment with 3 saved trials").</li>
   <li>At 10:00 a banner offers "Stop &amp; save" or "Finish this step first". The 4× speed option keeps 10 timed swings to about 4 seconds.</li>
@@ -127,6 +129,10 @@
 <div class="grid">
   <figure><img src="screens/c1-stop-and-save.png" alt="Start screen after stop and save" /><figcaption>Stop &amp; save: back on the shared-tablet start screen with the resume message.</figcaption></figure>
   <figure><img src="screens/c2-resume.png" alt="Resumed session" /><figcaption>Resume: Sana continues at the saved step, clock and trials intact.</figcaption></figure>
+</div>
+<div class="grid">
+  <figure><img src="screens/f2-move-on-nudge.png" alt="Move-on nudge" /><figcaption>Pacing: the Experiment budget is used, so a nudge offers "Go to Check" or "1 more minute"; the header shows time left overall and for the step.</figcaption></figure>
+  <figure><img src="screens/f3-summary-how-to-tick.png" alt="Summary with how-to-tick guidance" /><figcaption>Wrap-up: the clock has stopped, and each outcome not yet achieved says what evidence is missing, with a button back to that step.</figcaption></figure>
 </div>
 <figure style="width:55%"><img src="screens/c3-time-up-tablet.png" alt="Time-up prompt on a tablet" /><figcaption>At 10:00 the clock turns amber and offers "Stop &amp; save" or "Finish this step first" (tablet portrait, 800 px).</figcaption></figure>
 
@@ -193,7 +199,9 @@ Reply with JSON only, no other text: {"label": "...", "feedback": "..."}</pre>
   <li><b>Language and engagement:</b> short, conversational sentences ("Let's find out…", "we"), verbal cues (First, Second, Third), highlighted key terms, and Hindi glosses for every key term. Lexend is used because it was designed for readability.</li>
   <li><b>Contrasting cases ("Race two pendulums"):</b> two pendulums that differ in only one thing swing side by side, after a prediction. Seeing a light and a heavy bob stay in step is direct, visual evidence against M1. Seeing a 25 cm pendulum swing twice for every swing of a 100 cm one makes the √L relation visible.</li>
   <li><b>Multiple representations for M2:</b> the dashed swing path and the live speed bar show that a bigger angle gives a longer path <i>and</i> a higher speed (for example 35 cm at 0.39 m/s for 10°, 70 cm at 0.77 m/s for 20°), so the time stays the same. The 3D view (turnable camera, floor shadow) helps learners who have never seen a real lab stand picture the set-up; the 2D view keeps the measuring tools.</li>
-  <li><b>Transfer to daily life:</b> the wrap-up links the idea to the playground jhoola, pendulum clocks and a 25 cm thread experiment at home (about 10 s for 10 swings).</li>
+  <li><b>Pacing for C4:</b> a learner who takes too long in one step is nudged on with a concrete next action rather than cut off, so a complete sequence fits in 10 minutes. The countdown shows time left, not time used, which is easier for a 14-year-old to act on. Outcomes on the summary are ticked only from evidence, and each missing tick says exactly what to redo (feedback for self-regulation).</li>
+  <li><b>Transfer to daily life:</b> the start screen shows a swinging playground jhoola with a hook question ("a jhoola with 2 m ropes takes about 2.8 seconds for one full swing, whoever sits on it. Why?").</li>
+  <li><b>Wrap-up examples:</b> the wrap-up links the idea to the playground jhoola, pendulum clocks and a 25 cm thread experiment at home (about 10 s for 10 swings).</li>
   <li><b>Topic-specific tools:</b> stopwatch (10-swing timing), ruler (string length in cm with a red marker), protractor (starting angle), data table with change highlighting, and a period-vs-length graph.</li>
 </ul>
 
@@ -212,7 +220,7 @@ Reply with JSON only, no other text: {"label": "...", "feedback": "..."}</pre>
 <table>
   <tr><th>#</th><th>Tool and when</th><th>What it was used for</th><th>Export</th></tr>
   <tr><td>1</td><td>Claude Code (Claude, in VS Code), 18 Nov 00:30–01:40 IST, before the exam</td><td>Exam preparation only: installed Claude Code plugins and the Vercel CLI, checked GitHub/Vercel deployment, and created an empty Vite + React + Tailwind scaffold (template code only, no app content). A practice "photosynthesis" starter was begun and deleted before the exam; none of it is in this repository.</td><td rowspan="2"><code>ai-chat-export.html</code> (same chat, exported from the Claude Code session transcript) and <code>ai-chat-summary.pdf</code></td></tr>
-  <tr><td>2</td><td>Same Claude Code chat, continued 18 Nov 18:23–19:55 IST (exam)</td><td>Read the exam document; recommended the card (P5-T1-L2-C4) with reasons, which I accepted; drafted DESIGN.md; wrote the app code, the AI coach function and this report; deployed to Vercel; ran both learner scenarios in a browser and took the screenshots. After testing the app myself, I asked for richer learning features (a 3D view, better visualisation) and reported that the answer "yes it is" got a vague coach reply. Claude added the 3D view, swing path and speed bar, "Race two pendulums" and real-life examples, and made the coach treat "yes"/"no" answers correctly (19:05).</td></tr>
+  <tr><td>2</td><td>Same Claude Code chat, continued 18 Nov 18:23–19:55 IST (exam)</td><td>Read the exam document; recommended the card (P5-T1-L2-C4) with reasons, which I accepted; drafted DESIGN.md; wrote the app code, the AI coach function and this report; deployed to Vercel; ran both learner scenarios in a browser and took the screenshots. After testing the app myself, I asked for richer learning features (a 3D view, better visualisation) and reported that the answer "yes it is" got a vague coach reply. Claude added the 3D view, swing path and speed bar, "Race two pendulums" and real-life examples, and made the coach treat "yes"/"no" answers correctly (19:05). I then asked why the clock kept running on Wrap-up, how the three outcomes get ticked, why the AI did not answer, how to keep learners within 10 minutes, and for a topic image. Claude stopped the clock at Wrap-up, added per-step time budgets with move-on nudges and "how to tick" guidance, explained that the AI needs an API key (the labelled fallback answered), and added the jhoola illustration (19:18).</td></tr>
 </table>
 <h3>Reflection</h3>
 <ul>
