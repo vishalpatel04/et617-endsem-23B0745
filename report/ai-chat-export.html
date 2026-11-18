@@ -608,4 +608,46 @@ I&#x27;ll make the changes now and keep them small so there&#x27;s still time fo
 <div class="row tool">⚙ Read: /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/screens/f1-start-jhoola.png</div>
 <div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:19 IST</div>The swinging jhoola illustration looks good. It&#x27;s 19:20, so I&#x27;ll put these changes into the report and AI summary, regenerate the PDFs and the chat export, and commit.</div>
 <div class="row tool">⚙ Bash: Update report and summary, regenerate PDFs and export, commit</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:20 IST</div>Done and committed at 19:20. I&#x27;ll add the new pacing features to your viva notes.</div>
+<div class="row tool">⚙ Bash: Add pacing features to the viva prep notes</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:20 IST</div>I&#x27;ve fixed everything from your screenshots. The changes are live at https://et617-23b0745.vercel.app, tested with no page errors, and committed at 19:20 with the report and chat files updated.
+
+**1. Clock running on Wrap-up (images 1–2):** this was a bug, and it&#x27;s fixed. The clock now stops when you reach Wrap-up and shows &quot;Done in 07:03&quot;; I checked it stays still.
+
+**2. How all three ticks work (image 3):** a tick appears only when the evidence is there:
+- **Tick 1:** all 3 predictions made, plus a fair test of mass, angle and length.
+- **Tick 2:** at least 2 fair tests, and Check Task 2 right (the pair where only one thing changes).
+- **Tick 3:** Task 1 right (about 1.0 s), and the coach marks your Task 3 explanation correct.
+
+You answered 0.5, A and &quot;yes it is&quot;, so only tick 1 appeared. Each missing tick now says **&quot;To tick this: …&quot;** with a button straight back to the right step.
+
+**3. Why the AI didn&#x27;t answer (image 4):** the real AI needs an Anthropic API key in Vercel, and none is set, so the labelled rule-based coach replied. That is the &quot;Offline coach&quot; line, and the exam rules allow it (&quot;a clearly labelled fallback… is acceptable&quot;); the report&#x27;s D6 describes the real AI behaviour. If you have a key, add it in Vercel → et617-23b0745 → Settings → Environment Variables as `ANTHROPIC_API_KEY` and tell me. Don&#x27;t paste it here.
+
+**4. Finishing within 10 minutes (images 5–6):**
+- The header counts **down** (&quot;06:48 left&quot;) and shows the **budget for the current step** (&quot;Experiment: 01:20 of 5 min left&quot;).
+- When a step&#x27;s time runs out, a **move-on nudge** appears: &quot;You planned 5 min for Experiment. Move on to Check…&quot; with **Go to Check** or **1 more minute**.
+- At 10:00 the learner can **Stop &amp; save** and continue next time from the same step, or choose **Finish this step first**.
+
+**5. Topic image (image 7):** the start screen now has a **playground jhoola illustration whose seat really swings**, with the hook &quot;A jhoola with 2 m ropes takes about 2.8 seconds for one full swing, whoever sits on it. Why? Let&#x27;s find out.&quot; The physics checks out: T = 2π√(2/9.81) ≈ 2.84 s.
+
+## Stop adding features now (it&#x27;s 19:20; Moodle closes at 20:00)
+
+1. Disclose your card in the Moodle Excel sheet if you haven&#x27;t (P5 / P5-T1 / L2 / C4 / 23B0745), and **take a screenshot of the card**.
+2. Read the report&#x27;s **AI-use reflection** and put it in your own words.
+3. At about **19:50**, run `~/Desktop/ET617/update-chat-export.sh` so the export includes everything.
+4. **Submit by 19:55:**
+   - Live app URL: https://et617-23b0745.vercel.app
+   - Repo: https://github.com/vishalpatel04/et617-endsem-23B0745
+   - Report: `report/ET617-EndSem-23B0745-Report.pdf`
+   - AI chat files: `report/ai-chat-export.pdf` and `report/ai-chat-summary.pdf`
+   - Your exam-card screenshot
+
+For the viva, use `~/Desktop/ET617/VIVA-PREP-23B0745.md`, which now also covers the pacing features and how the ticks work. Make any live change on a `viva` branch and deploy it with `vercel deploy`, never `--prod`.</div>
+<div class="row user"><div class="who">You (student) · 18 Nov 19:24 IST</div>hey after my first submit when the time stop and when i again returning to the same user the time not continue to start from that point which i dont want
+[1 screenshot(s) attached]</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:24 IST</div>The clock now stops whenever a learner has finished (`completedAt`), even after they come back and keep working. It should stop **only on the Wrap-up screen**. Anywhere else, including after a finished learner returns to Experiment or Check, it should continue from the saved time (02:00 in your case). That&#x27;s a one-line fix, which I&#x27;ll make and test now.</div>
+<div class="row tool">⚙ Bash: Make the clock stop only on Wrap-up; lint and build</div>
+<div class="row tool">⚙ Bash: Remove unused variable, rebuild, commit, push, deploy</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:25 IST</div>Deployed. Next I&#x27;ll test your exact case: a learner finishes, comes back, opens Experiment, and the clock should continue from the saved time.</div>
+<div class="row tool">⚙ mcp__plugin_playwright_playwright__browser_run_code_unsafe: </div>
 </body></html>
