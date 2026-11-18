@@ -34,6 +34,7 @@ export default function Lab({ learner, update, goTo }) {
   const [mode, setMode] = useState('lab')
   const [view, setView] = useState('2d')
   const [turn, setTurn] = useState(35)
+  const [plotVar, setPlotVar] = useState('length')
 
   // Adaptivity (learner profile): experiments the learner predicted wrongly come first.
   const wrong = ['mass', 'angle', 'length'].filter((id) => predictionIsWrong(learner, id))
@@ -309,18 +310,48 @@ export default function Lab({ learner, update, goTo }) {
 
         {learner.trials.length > 1 && (
           <Card>
-            <h2 className="text-lg font-bold">Graph: period vs length</h2>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="text-lg font-bold">Graph: period vs {variableById(plotVar).short}</h2>
+              <div className="flex rounded-xl border border-slate-300 p-1 text-sm" role="group" aria-label="Plot period against">
+                {VARIABLES.map((v) => (
+                  <button
+                    key={v.id}
+                    type="button"
+                    onClick={() => {
+                      setPlotVar(v.id)
+                      logEvent(learner, 'graph_axis', { variable: v.id })
+                    }}
+                    aria-pressed={plotVar === v.id}
+                    className={`rounded-lg px-3 py-1.5 font-medium capitalize ${plotVar === v.id ? 'bg-indigo-600 text-white' : 'text-slate-700'}`}
+                  >
+                    {v.short}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="mt-2 h-56">
               <ResponsiveContainer width="100%" height="100%">
                 <ScatterChart margin={{ top: 8, right: 12, bottom: 18, left: 0 }}>
                   <CartesianGrid stroke="#e2e8f0" />
-                  <XAxis type="number" dataKey="length" name="Length" unit=" cm" domain={[0, 100]} label={{ value: 'String length (cm)', position: 'insideBottom', offset: -10 }} />
+                  <XAxis
+                    type="number"
+                    dataKey={plotVar}
+                    name={variableById(plotVar).name}
+                    unit={plotVar === 'angle' ? '°' : ` ${variableById(plotVar).unit}`}
+                    domain={[0, variableById(plotVar).max]}
+                    label={{ value: `${variableById(plotVar).name} (${variableById(plotVar).unit})`, position: 'insideBottom', offset: -10 }}
+                  />
                   <YAxis type="number" dataKey="period" name="Period" unit=" s" domain={[0, 2.2]} width={52} />
                   <Tooltip cursor={{ strokeDasharray: '3 3' }} />
                   <Scatter data={learner.trials} fill="#4f46e5" />
                 </ScatterChart>
               </ResponsiveContainer>
             </div>
+            <p className="mt-2 text-sm text-slate-600">
+              {plotVar === 'length'
+                ? 'How to read it: do the points rise as the string gets longer? Do they rise in a straight line, or do they bend?'
+                : `How to read it: if the points make a flat line, the period does not depend on the ${variableById(plotVar).short}. If they rise or fall, it does.`}
+            </p>
           </Card>
         )}
 
