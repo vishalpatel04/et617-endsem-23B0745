@@ -65,8 +65,8 @@ export default function Pendulum({ length, mass, angle, running, speed, lastTime
           const [x2, y2] = point(ARC_R, deg)
           return <line key={deg} x1={x1} y1={y1} x2={x2} y2={y2} className="stroke-sky-500" strokeWidth="1.2" />
         })}
-        {[-20, -10, 10, 20].map((deg) => {
-          const [x, y] = point(84, deg)
+        {[-20, 20].map((deg) => {
+          const [x, y] = point(88, deg)
           return (
             <text key={deg} x={x} y={y + 4} textAnchor="middle" className="fill-sky-700 text-[9px]">
               {Math.abs(deg)}°

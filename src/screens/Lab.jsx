@@ -29,6 +29,7 @@ export default function Lab({ learner, update, goTo }) {
   const [result, setResult] = useState(null)
   const [hintLevel, setHintLevel] = useState(0)
   const [helper, setHelper] = useState(null)
+  const [helperFrom, setHelperFrom] = useState(null)
 
   // Adaptivity (learner profile): experiments the learner predicted wrongly come first.
   const wrong = ['mass', 'angle', 'length'].filter((id) => predictionIsWrong(learner, id))
@@ -77,12 +78,15 @@ export default function Lab({ learner, update, goTo }) {
     if (kind === 'fair') setHelper(null)
   }, [learner, settings, update])
 
+  // Fair-test helper: copy the latest trial and unlock only the chosen variable,
+  // so the next run differs from the latest trial in exactly one thing.
   const startHelper = (id) => {
-    const prev = result.prev
-    setSettings({ length: prev.length, mass: prev.mass, angle: prev.angle })
+    const base = result.trial
+    setSettings({ length: base.length, mass: base.mass, angle: base.angle })
     setHelper(id)
+    setHelperFrom(base.n)
     showHint(3)
-    logEvent(learner, 'fair_test_helper', { variable: id, copiedTrial: prev.n })
+    logEvent(learner, 'fair_test_helper', { variable: id, copiedTrial: base.n })
   }
 
   const revise = (id, belief) => {
@@ -106,7 +110,7 @@ export default function Lab({ learner, update, goTo }) {
               <Lock className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
               <span>
                 Fair-test helper is on: only the <b>{variableById(helper).short}</b> can change. The other sliders are locked
-                to trial {result?.prev?.n}.{' '}
+                to trial {helperFrom}.{' '}
                 <button type="button" className="font-semibold underline" onClick={() => setHelper(null)}>
                   Turn off
                 </button>
@@ -124,7 +128,8 @@ export default function Lab({ learner, update, goTo }) {
                     </span>
                     <span className="flex items-center gap-1 text-lg font-bold tabular-nums">
                       {locked && !running && <Lock className="size-4 text-slate-400" aria-label="locked" />}
-                      {settings[v.id]} {v.unit}
+                      {settings[v.id]}
+                      {v.unit === '°' ? '°' : ` ${v.unit}`}
                     </span>
                   </span>
                   <input
@@ -302,7 +307,7 @@ function ResultCard({ result, learner, hintLevel, showHint, startHelper, revise 
           <p className="flex gap-2">
             <Lightbulb className="mt-0.5 size-5 shrink-0 text-amber-600" aria-hidden="true" />
             <span>
-              <b>Hint 1:</b> Which ONE thing do you want to test? Choose it, and keep the other two the same as trial {prev.n}.
+              <b>Hint 1:</b> Which ONE thing do you want to test? Start from trial {trial.n} and change only that one thing.
             </span>
           </p>
           {hintLevel >= 2 && (
@@ -319,7 +324,7 @@ function ResultCard({ result, learner, hintLevel, showHint, startHelper, revise 
               <Lightbulb className="mt-0.5 size-5 shrink-0 text-amber-600" aria-hidden="true" />
               <div>
                 <p>
-                  <b>Hint 3: fair-test helper.</b> We copy trial {prev.n} and unlock only the thing you choose to test:
+                  <b>Hint 3: fair-test helper.</b> We copy trial {trial.n} and unlock only the thing you choose to test. Change it and run again:
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {comparison.changed.map((id) => (
