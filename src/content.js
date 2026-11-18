@@ -22,9 +22,9 @@ export const STEPS = [
 ]
 
 export const VARIABLES = [
-  { id: 'length', name: 'String length', short: 'length', hindi: 'dhaage ki lambai', unit: 'cm', min: 20, max: 100, step: 5 },
-  { id: 'mass', name: 'Mass of the bob', short: 'mass', hindi: 'vazan', unit: 'g', min: 50, max: 500, step: 50 },
-  { id: 'angle', name: 'Starting angle', short: 'angle', hindi: 'kitna kheencha', unit: '°', min: 5, max: 20, step: 5 },
+  { id: 'length', name: 'String length', short: 'length', hindi: 'डोरी की लंबाई', unit: 'cm', min: 20, max: 100, step: 5 },
+  { id: 'mass', name: 'Mass of the bob', short: 'mass', hindi: 'वज़न', unit: 'g', min: 50, max: 500, step: 50 },
+  { id: 'angle', name: 'Starting angle', short: 'angle', hindi: 'कितना खींचा', unit: '°', min: 5, max: 20, step: 5 },
 ]
 
 export function variableById(id) {
@@ -32,10 +32,10 @@ export function variableById(id) {
 }
 
 export const GLOSSARY = [
-  { term: 'Period', hindi: 'ek poore jhoole ka samay', meaning: 'time for one full swing, there and back' },
-  { term: 'Bob', hindi: 'latakta hua vazan', meaning: 'the weight at the end of the string' },
-  { term: 'Angle (amplitude)', hindi: 'kitna kheencha', meaning: 'how far you pull the bob back' },
-  { term: 'Fair test', hindi: 'sahi tulna', meaning: 'change only one thing, keep the rest the same' },
+  { term: 'Period', hindi: 'एक पूरे झूले का समय', meaning: 'time for one full swing, there and back' },
+  { term: 'Bob', hindi: 'लटकता हुआ वज़न', meaning: 'the weight at the end of the string' },
+  { term: 'Angle (amplitude)', hindi: 'कितना खींचा', meaning: 'how far you pull the bob back' },
+  { term: 'Fair test', hindi: 'सही परीक्षण', meaning: 'change only one thing, keep the rest the same' },
 ]
 
 // Step 2: predictions double as a diagnostic. Wrong ideas decide the order of experiments.

@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import { Button, Card } from '../components/ui.jsx'
 import { PREDICTIONS } from '../content.js'
+import { useLang } from '../lang.js'
 import { logEvent } from '../storage.js'
 
 // Predictions are hypotheses, not a test: no right/wrong is shown here. The lab checks them.
 export default function Predict({ learner, update, goTo }) {
+  const { t } = useLang()
   const [answers, setAnswers] = useState(learner.predictions ?? {})
   const complete = PREDICTIONS.every((p) => answers[p.id])
 
@@ -17,14 +19,14 @@ export default function Predict({ learner, update, goTo }) {
   return (
     <div className="mx-auto max-w-3xl space-y-5">
       <div>
-        <h1 className="text-2xl font-bold sm:text-3xl">What do you think will happen?</h1>
-        <p className="mt-1 text-slate-700">There is no wrong answer here. These are your ideas, and we will test them in the lab.</p>
+        <h1 className="text-2xl font-bold sm:text-3xl">{t('What do you think will happen?')}</h1>
+        <p className="mt-1 text-slate-700">{t('There is no wrong answer here. These are your ideas, and we will test them in the lab.')}</p>
       </div>
       {PREDICTIONS.map((p, i) => (
         <Card key={p.id}>
           <fieldset>
             <legend className="text-lg font-semibold">
-              {i + 1}. {p.prompt}
+              {i + 1}. {t(p.prompt)}
             </legend>
             <div className="mt-3 grid gap-2 sm:grid-cols-3">
               {p.options.map((o) => (
@@ -42,7 +44,7 @@ export default function Predict({ learner, update, goTo }) {
                     onChange={() => setAnswers((a) => ({ ...a, [p.id]: o.id }))}
                     className="size-5 accent-indigo-600"
                   />
-                  {o.label}
+                  {t(o.label)}
                 </label>
               ))}
             </div>
@@ -50,9 +52,9 @@ export default function Predict({ learner, update, goTo }) {
         </Card>
       ))}
       <div className="flex flex-wrap items-center justify-end gap-3">
-        {!complete && <p className="text-sm text-slate-600">Answer all three to continue.</p>}
+        {!complete && <p className="text-sm text-slate-600">{t('Answer all three to continue.')}</p>}
         <Button onClick={save} disabled={!complete}>
-          Save my ideas and go to the lab
+          {t('Save my ideas and go to the lab')}
         </Button>
       </div>
     </div>

@@ -28,6 +28,7 @@ export default async function handler(req, res) {
   const explanation = typeof body.explanation === 'string' ? body.explanation.trim().slice(0, 600) : ''
   if (!explanation) return res.status(400).json({ error: 'An explanation is required' })
   const trials = Array.isArray(body.trials) ? body.trials.slice(-8) : []
+  const hindi = body.lang === 'hi'
 
   const client = new Anthropic()
   try {
@@ -37,7 +38,9 @@ export default async function handler(req, res) {
       betas: ['server-side-fallback-2026-07-01'],
       fallbacks: 'default',
       output_config: { effort: 'low' },
-      system: SYSTEM_PROMPT,
+      system: hindi
+        ? `${SYSTEM_PROMPT}\nLanguage: write the "feedback" value in simple Hindi in Devanagari script (for example आवर्तकाल, वज़न, कोण, लंबाई), at most 2 short sentences. Keep the "label" value exactly as listed in English.`
+        : SYSTEM_PROMPT,
       messages: [
         {
           role: 'user',

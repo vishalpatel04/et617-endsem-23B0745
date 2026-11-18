@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Save, Timer } from 'lucide-react'
+import LanguageToggle from './components/LanguageToggle.jsx'
 import { Button } from './components/ui.jsx'
 import { APP_NAME, IDENTITY, SESSION_MINUTES, STEPS } from './content.js'
+import { useLang } from './lang.js'
 import { logEvent, saveLearner } from './storage.js'
 import About from './screens/About.jsx'
 import Check from './screens/Check.jsx'
@@ -19,6 +21,7 @@ function clock(ms) {
 }
 
 export default function App() {
+  const { t } = useLang()
   const [view, setView] = useState('start')
   const [previousView, setPreviousView] = useState('start')
   const [learner, setLearner] = useState(null)
@@ -62,7 +65,9 @@ export default function App() {
     setNotice(
       isNew
         ? ''
-        : `Welcome back, ${picked.name}! You are continuing from “${step.label}” with ${picked.trials.length} saved trial${picked.trials.length === 1 ? '' : 's'}.`,
+        : picked.trials.length === 1
+          ? t('Welcome back, {name}! You are continuing from “{step}” with 1 saved trial.', { name: picked.name, step: t(step.label) })
+          : t('Welcome back, {name}! You are continuing from “{step}” with {n} saved trials.', { name: picked.name, step: t(step.label), n: picked.trials.length }),
     )
     setView('learn')
     logEvent(picked, isNew ? 'session_start' : 'session_resume', { step: picked.step, elapsedMs: picked.elapsedMs })
@@ -81,7 +86,7 @@ export default function App() {
       // Every change is already saved by update(), so stopping only needs to log and leave.
       logEvent(learner, 'stop_save', { step: learner.step, elapsedMs: learner.elapsedMs })
       const step = STEPS.find((s) => s.id === learner.step) ?? STEPS[0]
-      setNotice(message ?? `Saved. ${learner.name}, next time pick your name to continue from “${step.label}”.`)
+      setNotice(message ?? t('Saved. {name}, next time pick your name to continue from “{step}”.', { name: learner.name, step: t(step.label) }))
     }
     setLearner(null)
     setView('start')
@@ -112,7 +117,12 @@ export default function App() {
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2">
-          <span className="text-lg font-bold text-indigo-700">{APP_NAME}</span>
+          <span className="text-lg font-bold text-indigo-700">{t(APP_NAME)}</span>
+          {!(view === 'learn' && learner) && (
+            <div className="ml-auto">
+              <LanguageToggle />
+            </div>
+          )}
           {view === 'learn' && learner && (
             <>
               <nav aria-label="Session steps" className="order-3 w-full sm:order-none sm:w-auto sm:flex-1">
@@ -131,23 +141,24 @@ export default function App() {
                             current ? 'bg-indigo-600 text-white' : reachable ? 'text-indigo-700 hover:bg-indigo-50' : 'text-slate-400'
                           }`}
                         >
-                          {i + 1}. {s.label}
+                          {i + 1}. {t(s.label)}
                         </button>
                       </li>
                     )
                   })}
                 </ol>
               </nav>
-              <div className="ml-auto flex items-center gap-3">
-                <div className="text-right" aria-label={clockStopped ? `Finished in ${clock(learner.elapsedMs)}` : `${clock(Math.max(0, timeLeft))} left of ${SESSION_MINUTES} minutes`}>
+              <div className="ml-auto flex flex-wrap items-center gap-3">
+                <LanguageToggle />
+                <div className="text-right" aria-label={clockStopped ? t('Done in {time}', { time: clock(learner.elapsedMs) }) : t('{time} left', { time: clock(Math.max(0, timeLeft)) })}>
                   <span className={`flex items-center justify-end gap-1 font-mono text-lg font-bold ${timeLeft < 0 && !clockStopped ? 'text-amber-600' : clockStopped ? 'text-emerald-700' : ''}`}>
                     <Timer className="size-5" aria-hidden="true" />
-                    {clockStopped ? `Done in ${clock(learner.elapsedMs)}` : timeLeft >= 0 ? `${clock(timeLeft)} left` : `${clock(-timeLeft)} over`}
+                    {clockStopped ? t('Done in {time}', { time: clock(learner.elapsedMs) }) : timeLeft >= 0 ? t('{time} left', { time: clock(timeLeft) }) : t('{time} over', { time: clock(-timeLeft) })}
                   </span>
                   <span className="block text-xs text-slate-600">
                     {clockStopped
-                      ? 'Clock stopped'
-                      : `${stepInfo.label}: ${clock(Math.max(0, stepBudgetMs - stepUsedMs))} of ${Math.round(stepBudgetMs / 6000) / 10} min left`}
+                      ? t('Clock stopped')
+                      : t('{step}: {time} of {min} min left', { step: t(stepInfo.label), time: clock(Math.max(0, stepBudgetMs - stepUsedMs)), min: Math.round(stepBudgetMs / 6000) / 10 })}
                   </span>
                   <span className="mt-0.5 block h-1.5 w-32 overflow-hidden rounded-full bg-slate-200">
                     <span
@@ -157,7 +168,7 @@ export default function App() {
                   </span>
                 </div>
                 <Button variant="secondary" onClick={() => stop()}>
-                  <Save className="size-5" aria-hidden="true" /> Stop &amp; save
+                  <Save className="size-5" aria-hidden="true" /> {t('Stop & save')}
                 </Button>
               </div>
             </>
@@ -168,12 +179,12 @@ export default function App() {
       {timeUp && (
         <div className="border-b border-amber-300 bg-amber-50" role="alert">
           <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-4 py-3">
-            <p className="flex-1 font-medium">Your 10 minutes are up. Your work is saved, so you can stop now and continue next time.</p>
+            <p className="flex-1 font-medium">{t('Your 10 minutes are up. Your work is saved, so you can stop now and continue next time.')}</p>
             <Button variant="secondary" onClick={() => stop()}>
-              Stop &amp; save
+              {t('Stop & save')}
             </Button>
             <Button variant="ghost" onClick={() => setExtraTime(true)}>
-              Finish this step first
+              {t('Finish this step first')}
             </Button>
           </div>
         </div>
@@ -184,12 +195,12 @@ export default function App() {
           <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-4 py-3">
             <p className="flex-1 font-medium">
               {learner.step === 'predict'
-                ? 'Your planned time for Predict is used. First ideas are fine: choose quickly and save them.'
-                : `You planned ${stepInfo.minutes} min for “${stepInfo.label}”. Move on to “${nextStep.label}” so you finish in ${SESSION_MINUTES} minutes.`}
+                ? t('Your planned time for Predict is used. First ideas are fine: choose quickly and save them.')
+                : t('You planned {min} min for “{step}”. Move on to “{next}” so you finish in {total} minutes.', { min: stepInfo.minutes, step: t(stepInfo.label), next: t(nextStep.label), total: SESSION_MINUTES })}
             </p>
-            {learner.step !== 'predict' && nextStep && <Button onClick={() => goTo(nextStep.id)}>Go to {nextStep.label}</Button>}
+            {learner.step !== 'predict' && nextStep && <Button onClick={() => goTo(nextStep.id)}>{t('Go to {step}', { step: t(nextStep.label) })}</Button>}
             <Button variant="ghost" onClick={moreTime}>
-              1 more minute
+              {t('1 more minute')}
             </Button>
           </div>
         </div>
@@ -200,7 +211,7 @@ export default function App() {
           <div className="mb-5 flex flex-wrap items-center gap-3 rounded-2xl border border-emerald-300 bg-emerald-50 p-4" role="status">
             <p className="flex-1 font-medium">{notice}</p>
             <Button variant="ghost" onClick={() => setNotice('')}>
-              OK
+              {t('OK')}
             </Button>
           </div>
         )}
@@ -216,10 +227,10 @@ export default function App() {
       <footer className="border-t border-slate-200 bg-white">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-4 py-3 text-sm text-slate-600">
           <span>
-            {APP_NAME} | ET 617 End-Sem | Identity token: <b className="text-slate-900">{IDENTITY}</b>
+            {t(APP_NAME)} | ET 617 End-Sem | {t('Identity token')}: <b className="text-slate-900">{IDENTITY}</b>
           </span>
           <button type="button" onClick={showAbout} className="font-semibold text-indigo-700 underline">
-            About this app
+            {t('About this app')}
           </button>
         </div>
       </footer>

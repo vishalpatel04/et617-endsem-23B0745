@@ -3,15 +3,22 @@ import { CartesianGrid, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAx
 import { CircleCheck, Lightbulb, Lock, Play, TriangleExclamationPoint } from 'lucide-react'
 import Pendulum from '../components/Pendulum.jsx'
 import RacePendulums from '../components/RacePendulums.jsx'
+import Rich from '../components/Rich.jsx'
 import { Button, Card, Key } from '../components/ui.jsx'
 import { MISCONCEPTION_FEEDBACK, PREDICTIONS, VARIABLES, variableById } from '../content.js'
+import { useLang } from '../lang.js'
 import { changedVariables, compareTrials, measureTenSwings, round2 } from '../physics.js'
 import { logEvent } from '../storage.js'
 
 const DEFAULT_SETTINGS = { length: 50, mass: 100, angle: 10 }
 
-function names(ids) {
-  return ids.map((id) => variableById(id).short).join(' and ')
+// Variable names in the learner's language (length / mass / angle), joined with "and".
+function vname(t, id) {
+  return t(variableById(id).short)
+}
+
+function joinNames(t, ids) {
+  return ids.map((id) => vname(t, id)).join(t(' and '))
 }
 
 function predictionIsWrong(learner, id) {
@@ -21,6 +28,7 @@ function predictionIsWrong(learner, id) {
 }
 
 export default function Lab({ learner, update, goTo }) {
+  const { t, lang } = useLang()
   const lastTrial = learner.trials.at(-1)
   const [settings, setSettings] = useState(() =>
     lastTrial ? { length: lastTrial.length, mass: lastTrial.mass, angle: lastTrial.angle } : DEFAULT_SETTINGS,
@@ -103,10 +111,10 @@ export default function Lab({ learner, update, goTo }) {
     result?.kind === 'unfair' && hintLevel >= 2 ? [result.prev.n, result.trial.n] : []
 
   const tabs = (
-    <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Lab views">
+    <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label={t('Lab views')}>
       {[
-        ['lab', 'My fair tests'],
-        ['race', 'Race two pendulums'],
+        ['lab', t('My fair tests')],
+        ['race', t('Race two pendulums')],
       ].map(([id, label]) => (
         <button
           key={id}
@@ -142,10 +150,10 @@ export default function Lab({ learner, update, goTo }) {
       <div className="space-y-4">
         <Card>
           <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-            <div className="flex rounded-xl border border-slate-300 p-1 text-sm" role="group" aria-label="View">
+            <div className="flex rounded-xl border border-slate-300 p-1 text-sm" role="group" aria-label={t('View')}>
               {[
-                ['2d', '2D: measure'],
-                ['3d', '3D view'],
+                ['2d', t('2D: measure')],
+                ['3d', t('3D view')],
               ].map(([id, label]) => (
                 <button
                   key={id}
@@ -163,24 +171,23 @@ export default function Lab({ learner, update, goTo }) {
             </div>
             {view === '3d' && (
               <label className="flex items-center gap-2 text-sm font-medium">
-                Turn the view
-                <input type="range" min="0" max="75" step="5" value={turn} onChange={(e) => setTurn(Number(e.target.value))} className="w-28 accent-indigo-600" aria-label="Turn the 3D view" />
+                {t('Turn the view')}
+                <input type="range" min="0" max="75" step="5" value={turn} onChange={(e) => setTurn(Number(e.target.value))} className="w-28 accent-indigo-600" aria-label={t('Turn the 3D view')} />
               </label>
             )}
           </div>
           <Pendulum {...settings} running={running} speed={speed} lastTime={lastTrial?.tenSwings} onDone={finish} view={view} turn={turn} />
-          {view === '3d' && <p className="mt-2 text-center text-xs text-slate-500">Switch to 2D to read the ruler and protractor.</p>}
+          {view === '3d' && <p className="mt-2 text-center text-xs text-slate-500">{t('Switch to 2D to read the ruler and protractor.')}</p>}
         </Card>
         <Card>
-          <h2 className="text-lg font-bold">Set up your experiment</h2>
+          <h2 className="text-lg font-bold">{t('Set up your experiment')}</h2>
           {helper && (
             <p className="mt-2 flex items-start gap-2 rounded-xl bg-indigo-50 p-3 text-sm text-indigo-900">
               <Lock className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
               <span>
-                Fair-test helper is on: only the <b>{variableById(helper).short}</b> can change. The other sliders are locked
-                to trial {helperFrom}.{' '}
+                <Rich text={t('Fair-test helper is on: only the <b>{v}</b> can change. The other sliders are locked to trial {n}.', { v: vname(t, helper), n: helperFrom })} />{' '}
                 <button type="button" className="font-semibold underline" onClick={() => setHelper(null)}>
-                  Turn off
+                  {t('Turn off')}
                 </button>
               </span>
             </p>
@@ -192,12 +199,12 @@ export default function Lab({ learner, update, goTo }) {
                 <label key={v.id} className="block">
                   <span className="flex items-baseline justify-between gap-2">
                     <span className="font-medium">
-                      {v.name} <span className="text-sm text-slate-500">({v.hindi})</span>
+                      {t(v.name)} {lang === 'en' && <span className="text-sm text-slate-500">({v.hindi})</span>}
                     </span>
                     <span className="flex items-center gap-1 text-lg font-bold tabular-nums">
-                      {locked && !running && <Lock className="size-4 text-slate-400" aria-label="locked" />}
+                      {locked && !running && <Lock className="size-4 text-slate-400" aria-label={t('locked')} />}
                       {settings[v.id]}
-                      {v.unit === '°' ? '°' : ` ${v.unit}`}
+                      {v.unit === '°' ? '°' : ` ${t(v.unit)}`}
                     </span>
                   </span>
                   <input
@@ -209,17 +216,17 @@ export default function Lab({ learner, update, goTo }) {
                     disabled={locked}
                     onChange={(e) => setSettings((s) => ({ ...s, [v.id]: Number(e.target.value) }))}
                     className="mt-2 h-8 w-full accent-indigo-600 disabled:opacity-40"
-                    aria-label={v.name}
+                    aria-label={t(v.name)}
                   />
                 </label>
               )
             })}
           </div>
           <div className="mt-5 flex flex-wrap items-center gap-2">
-            <Button onClick={run} disabled={running} className="flex-1">
-              <Play className="size-5" aria-hidden="true" /> {running ? 'Timing 10 swings…' : 'Run 10 swings'}
+            <Button onClick={run} disabled={running} className="min-w-44 flex-1 whitespace-nowrap">
+              <Play className="size-5" aria-hidden="true" /> {running ? t('Timing 10 swings…') : t('Run 10 swings')}
             </Button>
-            <div className="flex rounded-xl border border-slate-300 p-1 text-sm" role="group" aria-label="Animation speed">
+            <div className="flex rounded-xl border border-slate-300 p-1 text-sm" role="group" aria-label={t('Animation speed')}>
               {[1, 4].map((s) => (
                 <button
                   key={s}
@@ -229,7 +236,7 @@ export default function Lab({ learner, update, goTo }) {
                   aria-pressed={speed === s}
                   className={`rounded-lg px-3 py-1.5 font-medium ${speed === s ? 'bg-indigo-600 text-white' : 'text-slate-700'}`}
                 >
-                  {s === 1 ? 'Real speed' : '4× faster'}
+                  {s === 1 ? t('Real speed') : t('4× faster')}
                 </button>
               ))}
             </div>
@@ -239,30 +246,30 @@ export default function Lab({ learner, update, goTo }) {
 
       <div className="space-y-4">
         <Card tone="info">
-          <h2 className="text-lg font-bold">Your experiments</h2>
+          <h2 className="text-lg font-bold">{t('Your experiments')}</h2>
           <p className="mt-1 text-slate-700">
             {wrong.length
-              ? `You predicted that the ${names(wrong)} would work differently, so let’s test ${variableById(order[0]).short} first.`
-              : 'Your predictions look strong. Test each one to be sure.'}{' '}
-            For each test, change <Key>only one thing</Key> between two trials.
+              ? t('You predicted that the {names} would work differently, so let’s test {first} first.', { names: joinNames(t, wrong), first: vname(t, order[0]) })
+              : t('Your predictions look strong. Test each one to be sure.')}{' '}
+            <Rich text={t('For each test, change <k>only one thing</k> between two trials.')} />
           </p>
           <ol className="mt-3 space-y-2">
             {order.map((id, i) => (
               <li key={id} className="flex items-center gap-2">
                 {done[id] ? (
-                  <CircleCheck className="size-5 text-emerald-600" aria-label="done" />
+                  <CircleCheck className="size-5 text-emerald-600" aria-label={t('done')} />
                 ) : (
                   <span className="grid size-5 place-items-center rounded-full border-2 border-slate-400 text-xs font-bold">{i + 1}</span>
                 )}
                 <span className={done[id] ? 'text-slate-500 line-through' : 'font-medium'}>
-                  Test the {variableById(id).short}: change only the {variableById(id).short}
+                  {t('Test the {v}: change only the {v}', { v: vname(t, id) })}
                 </span>
               </li>
             ))}
           </ol>
           {Object.keys(done).length > 0 && (
             <p className="mt-3 text-sm text-slate-700">
-              Challenge: try 25 cm and then 100 cm. Is the period 4 times longer, or less?
+              {t('Challenge: try 25 cm and then 100 cm. Is the period 4 times longer, or less?')}
             </p>
           )}
         </Card>
@@ -270,40 +277,40 @@ export default function Lab({ learner, update, goTo }) {
         {result && <ResultCard result={result} learner={learner} hintLevel={hintLevel} showHint={showHint} startHelper={startHelper} revise={revise} />}
 
         <Card>
-          <h2 className="text-lg font-bold">Your data table</h2>
+          <h2 className="text-lg font-bold">{t('Your data table')}</h2>
           {learner.trials.length === 0 ? (
-            <p className="mt-2 text-slate-600">No trials yet. Press “Run 10 swings” to time your first trial.</p>
+            <p className="mt-2 text-slate-600">{t('No trials yet. Press “Run 10 swings” to time your first trial.')}</p>
           ) : (
             <div className="mt-3 overflow-x-auto">
               <table className="w-full min-w-[30rem] text-left text-sm">
                 <thead className="text-slate-500">
                   <tr>
-                    <th className="py-1 pr-2">Trial</th>
-                    <th className="pr-2">Length</th>
-                    <th className="pr-2">Mass</th>
-                    <th className="pr-2">Angle</th>
-                    <th className="pr-2">10 swings</th>
-                    <th>Period (one swing)</th>
+                    <th className="py-1 pr-2">{t('Trial')}</th>
+                    <th className="pr-2">{t('Length')}</th>
+                    <th className="pr-2">{t('Mass')}</th>
+                    <th className="pr-2">{t('Angle')}</th>
+                    <th className="pr-2">{t('10 swings')}</th>
+                    <th>{t('Period (one swing)')}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {learner.trials.map((t, i) => {
-                    const changed = i > 0 ? changedVariables(learner.trials[i - 1], t) : []
+                  {learner.trials.map((tr, i) => {
+                    const changed = i > 0 ? changedVariables(learner.trials[i - 1], tr) : []
                     const cell = (id) => (changed.includes(id) ? 'bg-amber-200 font-semibold' : '')
                     return (
-                      <tr key={t.n} className={`border-t border-slate-200 ${highlightRows.includes(t.n) ? 'bg-rose-100' : ''}`}>
-                        <td className="py-1.5 pr-2 font-semibold">{t.n}</td>
-                        <td className={`pr-2 ${cell('length')}`}>{t.length} cm</td>
-                        <td className={`pr-2 ${cell('mass')}`}>{t.mass} g</td>
-                        <td className={`pr-2 ${cell('angle')}`}>{t.angle}°</td>
-                        <td className="pr-2 tabular-nums">{t.tenSwings.toFixed(2)} s</td>
-                        <td className="font-bold tabular-nums">{t.period.toFixed(2)} s</td>
+                      <tr key={tr.n} className={`border-t border-slate-200 ${highlightRows.includes(tr.n) ? 'bg-rose-100' : ''}`}>
+                        <td className="py-1.5 pr-2 font-semibold">{tr.n}</td>
+                        <td className={`pr-2 ${cell('length')}`}>{tr.length} {t('cm')}</td>
+                        <td className={`pr-2 ${cell('mass')}`}>{tr.mass} {t('g')}</td>
+                        <td className={`pr-2 ${cell('angle')}`}>{tr.angle}°</td>
+                        <td className="pr-2 tabular-nums">{tr.tenSwings.toFixed(2)} {t('s')}</td>
+                        <td className="font-bold tabular-nums">{tr.period.toFixed(2)} {t('s')}</td>
                       </tr>
                     )
                   })}
                 </tbody>
               </table>
-              <p className="mt-2 text-xs text-slate-500">Yellow cells changed since the trial above.</p>
+              <p className="mt-2 text-xs text-slate-500">{t('Yellow cells changed since the trial above.')}</p>
             </div>
           )}
         </Card>
@@ -311,8 +318,8 @@ export default function Lab({ learner, update, goTo }) {
         {learner.trials.length > 1 && (
           <Card>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h2 className="text-lg font-bold">Graph: period vs {variableById(plotVar).short}</h2>
-              <div className="flex rounded-xl border border-slate-300 p-1 text-sm" role="group" aria-label="Plot period against">
+              <h2 className="text-lg font-bold">{t('Graph: period vs {v}', { v: vname(t, plotVar) })}</h2>
+              <div className="flex rounded-xl border border-slate-300 p-1 text-sm" role="group" aria-label={t('Plot period against')}>
                 {VARIABLES.map((v) => (
                   <button
                     key={v.id}
@@ -324,7 +331,7 @@ export default function Lab({ learner, update, goTo }) {
                     aria-pressed={plotVar === v.id}
                     className={`rounded-lg px-3 py-1.5 font-medium capitalize ${plotVar === v.id ? 'bg-indigo-600 text-white' : 'text-slate-700'}`}
                   >
-                    {v.short}
+                    {t(v.short)}
                   </button>
                 ))}
               </div>
@@ -336,12 +343,12 @@ export default function Lab({ learner, update, goTo }) {
                   <XAxis
                     type="number"
                     dataKey={plotVar}
-                    name={variableById(plotVar).name}
-                    unit={plotVar === 'angle' ? '°' : ` ${variableById(plotVar).unit}`}
+                    name={t(variableById(plotVar).name)}
+                    unit={plotVar === 'angle' ? '°' : ` ${t(variableById(plotVar).unit)}`}
                     domain={[0, variableById(plotVar).max]}
-                    label={{ value: `${variableById(plotVar).name} (${variableById(plotVar).unit})`, position: 'insideBottom', offset: -10 }}
+                    label={{ value: `${t(variableById(plotVar).name)} (${t(variableById(plotVar).unit)})`, position: 'insideBottom', offset: -10 }}
                   />
-                  <YAxis type="number" dataKey="period" name="Period" unit=" s" domain={[0, 2.2]} width={52} />
+                  <YAxis type="number" dataKey="period" name={t('Period')} unit={` ${t('s')}`} domain={[0, 2.2]} width={lang === 'hi' ? 96 : 64} />
                   <Tooltip cursor={{ strokeDasharray: '3 3' }} />
                   <Scatter data={learner.trials} fill="#4f46e5" />
                 </ScatterChart>
@@ -349,15 +356,15 @@ export default function Lab({ learner, update, goTo }) {
             </div>
             <p className="mt-2 text-sm text-slate-600">
               {plotVar === 'length'
-                ? 'How to read it: do the points rise as the string gets longer? Do they rise in a straight line, or do they bend?'
-                : `How to read it: if the points make a flat line, the period does not depend on the ${variableById(plotVar).short}. If they rise or fall, it does.`}
+                ? t('How to read it: do the points rise as the string gets longer? Do they rise in a straight line, or do they bend?')
+                : t('How to read it: if the points make a flat line, the period does not depend on the {v}. If they rise or fall, it does.', { v: vname(t, plotVar) })}
             </p>
           </Card>
         )}
 
         <div className="flex flex-wrap justify-end gap-2">
           <Button variant={remaining.length ? 'secondary' : 'success'} onClick={() => goTo('check')} disabled={running}>
-            {remaining.length ? `Go to Check (${remaining.length} test${remaining.length > 1 ? 's' : ''} left)` : 'All 3 fair tests done: go to Check'}
+            {remaining.length === 0 ? t('All 3 fair tests done: go to Check') : remaining.length === 1 ? t('Go to Check (1 test left)') : t('Go to Check ({n} tests left)', { n: remaining.length })}
           </Button>
         </div>
       </div>
@@ -367,14 +374,14 @@ export default function Lab({ learner, update, goTo }) {
 }
 
 function ResultCard({ result, learner, hintLevel, showHint, startHelper, revise }) {
+  const { t } = useLang()
   const { kind, trial, prev, comparison } = result
 
   if (kind === 'first') {
     return (
       <Card tone="info" aria-live="polite">
         <p>
-          Trial 1 is saved. 10 swings took <b>{trial.tenSwings.toFixed(2)} s</b>, so one swing (the <Key>period</Key>) is{' '}
-          <b>{trial.period.toFixed(2)} s</b>. Now change <Key>one thing</Key> and run again.
+          <Rich text={t('Trial 1 is saved. 10 swings took <b>{ten} s</b>, so one swing (the <k>period</k>) is <b>{p} s</b>. Now change <k>one thing</k> and run again.', { ten: trial.tenSwings.toFixed(2), p: trial.period.toFixed(2) })} />
         </p>
       </Card>
     )
@@ -383,10 +390,7 @@ function ResultCard({ result, learner, hintLevel, showHint, startHelper, revise 
   if (kind === 'repeat') {
     return (
       <Card tone="info" aria-live="polite">
-        <p>
-          Same settings as trial {prev.n}. The period is {trial.period.toFixed(2)} s (it was {prev.period.toFixed(2)} s). Repeating a
-          trial checks your timing. Now change one thing.
-        </p>
+        <p>{t('Same settings as trial {n}. The period is {a} s (it was {b} s). Repeating a trial checks your timing. Now change one thing.', { n: prev.n, a: trial.period.toFixed(2), b: prev.period.toFixed(2) })}</p>
       </Card>
     )
   }
@@ -396,25 +400,23 @@ function ResultCard({ result, learner, hintLevel, showHint, startHelper, revise 
     return (
       <Card tone="warn" aria-live="polite">
         <h3 className="flex items-center gap-2 text-lg font-bold">
-          <TriangleExclamationPoint className="size-5 text-amber-600" aria-hidden="true" /> Not a fair test yet
+          <TriangleExclamationPoint className="size-5 text-amber-600" aria-hidden="true" /> {t('Not a fair test yet')}
         </h3>
         <p className="mt-1">
-          Between trial {prev.n} and trial {trial.n} you changed the <b>{names(comparison.changed)}</b>. The period went from{' '}
-          {prev.period.toFixed(2)} s to {trial.period.toFixed(2)} s, but we cannot tell which change caused it.
+          <Rich text={t('Between trial {a} and trial {b} you changed the <b>{names}</b>. The period went from {p1} s to {p2} s, but we cannot tell which change caused it.', { a: prev.n, b: trial.n, names: joinNames(t, comparison.changed), p1: prev.period.toFixed(2), p2: trial.period.toFixed(2) })} />
         </p>
         <div className="mt-3 space-y-3 border-t border-amber-200 pt-3">
           <p className="flex gap-2">
             <Lightbulb className="mt-0.5 size-5 shrink-0 text-amber-600" aria-hidden="true" />
             <span>
-              <b>Hint 1:</b> Which ONE thing do you want to test? Start from trial {trial.n} and change only that one thing.
+              <Rich text={t('<b>Hint 1:</b> Which ONE thing do you want to test? Start from trial {n} and change only that one thing.', { n: trial.n })} />
             </span>
           </p>
           {hintLevel >= 2 && (
             <p className="flex gap-2">
               <Lightbulb className="mt-0.5 size-5 shrink-0 text-amber-600" aria-hidden="true" />
               <span>
-                <b>Hint 2:</b> Look at rows {prev.n} and {trial.n} in your table (shaded red). The yellow cells changed. In a fair
-                test, only ONE cell is yellow.
+                <Rich text={t('<b>Hint 2:</b> Look at rows {a} and {b} in your table (shaded red). The yellow cells changed. In a fair test, only ONE cell is yellow.', { a: prev.n, b: trial.n })} />
               </span>
             </p>
           )}
@@ -423,12 +425,12 @@ function ResultCard({ result, learner, hintLevel, showHint, startHelper, revise 
               <Lightbulb className="mt-0.5 size-5 shrink-0 text-amber-600" aria-hidden="true" />
               <div>
                 <p>
-                  <b>Hint 3: fair-test helper.</b> We copy trial {trial.n} and unlock only the thing you choose to test. Change it and run again:
+                  <Rich text={t('<b>Hint 3: fair-test helper.</b> We copy trial {n} and unlock only the thing you choose to test. Change it and run again:', { n: trial.n })} />
                 </p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {comparison.changed.map((id) => (
                     <Button key={id} variant="secondary" onClick={() => startHelper(id)}>
-                      Test only the {variableById(id).short}
+                      {t('Test only the {v}', { v: vname(t, id) })}
                     </Button>
                   ))}
                 </div>
@@ -437,7 +439,7 @@ function ResultCard({ result, learner, hintLevel, showHint, startHelper, revise 
           )}
           {hintLevel < 3 && (
             <Button variant="ghost" onClick={() => showHint(hintLevel + 1)}>
-              Show the next hint
+              {t('Show the next hint')}
             </Button>
           )}
         </div>
@@ -460,39 +462,37 @@ function ResultCard({ result, learner, hintLevel, showHint, startHelper, revise 
   return (
     <Card tone="good" aria-live="polite">
       <h3 className="flex items-center gap-2 text-lg font-bold">
-        <CircleCheck className="size-5 text-emerald-600" aria-hidden="true" /> Fair test of the {variable.short}
+        <CircleCheck className="size-5 text-emerald-600" aria-hidden="true" /> {t('Fair test of the {v}', { v: vname(t, id) })}
       </h3>
       <p className="mt-1">
-        You changed only the {variable.short} ({prev[id]} {variable.unit} → {trial[id]} {variable.unit}) and kept the rest the same.
+        {t('You changed only the {v} ({a} {u} → {b} {u}) and kept the rest the same.', { v: vname(t, id), a: prev[id], b: trial[id], u: variable.unit === '°' ? '°' : t(variable.unit) })}
       </p>
       <p className="mt-2 text-lg">
-        Period: <b>{prev.period.toFixed(2)} s</b> → <b>{trial.period.toFixed(2)} s</b>:{' '}
-        <Key>
-          {observed === 'same' ? 'about the same' : observed === 'more' ? 'longer' : 'shorter'}
-        </Key>
-        {observed === 'same' && <span className="text-sm text-slate-600"> (the difference is smaller than stopwatch error)</span>}
+        <Rich text={t('Period: <b>{a} s</b> → <b>{b} s</b>:', { a: prev.period.toFixed(2), b: trial.period.toFixed(2) })} />{' '}
+        <Key>{observed === 'same' ? t('about the same') : observed === 'more' ? t('longer') : t('shorter')}</Key>
+        {observed === 'same' && <span className="text-sm text-slate-600"> {t('(the difference is smaller than stopwatch error)')}</span>}
       </p>
       {expected &&
         (matches ? (
-          <p className="mt-2 font-medium text-emerald-800">This matches your prediction. Well done, scientist!</p>
+          <p className="mt-2 font-medium text-emerald-800">{t('This matches your prediction. Well done, scientist!')}</p>
         ) : (
           <div className="mt-3 rounded-xl bg-white p-3">
             <p>
-              Your prediction was different. {misconception && observed === 'same' ? MISCONCEPTION_FEEDBACK[misconception] : 'Your data is the boss: a longer string gives a longer period.'}
+              {t('Your prediction was different.')} {misconception && observed === 'same' ? t(MISCONCEPTION_FEEDBACK[misconception]) : t('Your data is the boss: a longer string gives a longer period.')}
             </p>
             {revised ? (
               <p className="mt-2 font-medium text-indigo-800">
-                {revised === 'changed-mind' ? 'You updated your idea. That is what scientists do!' : 'Fine: run another fair test to be sure.'}
+                {revised === 'changed-mind' ? t('You updated your idea. That is what scientists do!') : t('Fine: run another fair test to be sure.')}
               </p>
             ) : (
               <div className="mt-2">
-                <p className="font-medium">What do you think now?</p>
+                <p className="font-medium">{t('What do you think now?')}</p>
                 <div className="mt-2 flex flex-wrap gap-2">
                   <Button variant="success" onClick={() => revise(id, 'changed-mind')}>
-                    My data changed my idea
+                    {t('My data changed my idea')}
                   </Button>
                   <Button variant="secondary" onClick={() => revise(id, 'test-again')}>
-                    I want to test again
+                    {t('I want to test again')}
                   </Button>
                 </div>
               </div>

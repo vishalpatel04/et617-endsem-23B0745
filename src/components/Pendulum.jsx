@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
+import { useLang } from '../lang.js'
 import { idealPeriod } from '../physics.js'
+import Rich from './Rich.jsx'
 import Scene3D from './Scene3D.jsx'
 
 const PIVOT_X = 150
@@ -14,6 +16,7 @@ function point(radius, degrees) {
 
 // Animated virtual pendulum with three measuring tools: ruler (cm), protractor (degrees) and stopwatch.
 export default function Pendulum({ length, mass, angle, running, speed, lastTime, onDone, view = '2d', turn = 35 }) {
+  const { t, lang } = useLang()
   const [simTime, setSimTime] = useState(0)
   const onDoneRef = useRef(onDone)
   const period = idealPeriod(length)
@@ -26,13 +29,13 @@ export default function Pendulum({ length, mass, angle, running, speed, lastTime
     if (!running) return undefined
     let frame = 0
     let last = performance.now()
-    let t = 0
+    let elapsedSim = 0
     const total = 10 * period
     const tick = (now) => {
-      t = Math.min(t + (Math.min(now - last, 50) / 1000) * speed, total)
+      elapsedSim = Math.min(elapsedSim + (Math.min(now - last, 50) / 1000) * speed, total)
       last = now
-      setSimTime(t)
-      if (t >= total) {
+      setSimTime(elapsedSim)
+      if (elapsedSim >= total) {
         onDoneRef.current?.()
         return
       }
@@ -67,7 +70,7 @@ export default function Pendulum({ length, mass, angle, running, speed, lastTime
         viewBox="0 0 300 330"
         className="w-full max-w-[22rem]"
         role="img"
-        aria-label={`Pendulum with a ${length} cm string and a ${mass} g bob, pulled back ${angle} degrees`}
+        aria-label={t('Pendulum with a {length} cm string and a {mass} g bob, pulled back {angle} degrees', { length, mass, angle })}
       >
         <rect x="60" y="14" width="180" height="10" rx="3" className="fill-slate-700" />
         {/* Protractor */}
@@ -106,30 +109,30 @@ export default function Pendulum({ length, mass, angle, running, speed, lastTime
         <line x1={PIVOT_X} y1={PIVOT_Y} x2={bx} y2={by} className="stroke-slate-800" strokeWidth="2" />
         <circle cx={bx} cy={by} r={radius} className="fill-amber-400 stroke-amber-700" strokeWidth="2" />
         <text x={bx} y={by + 3} textAnchor="middle" className="fill-amber-900 text-[8px] font-semibold">
-          {mass}g
+          {mass}{t('g')}
         </text>
         <circle cx={PIVOT_X} cy={PIVOT_Y} r="4" className="fill-slate-800" />
       </svg>
       )}
       <figcaption className="mt-2 grid w-full max-w-[22rem] grid-cols-2 gap-2 text-center">
-        <div className="rounded-xl bg-slate-900 px-3 py-2 font-mono text-2xl text-emerald-300" aria-label="Stopwatch">
-          {clock.toFixed(2)} s
+        <div className={`rounded-xl bg-slate-900 px-3 py-2 font-mono whitespace-nowrap text-emerald-300 ${lang === 'hi' ? 'text-xl' : 'text-2xl'}`} aria-label={t('Stopwatch')}>
+          {clock.toFixed(2)} {t('s')}
         </div>
         <div className="rounded-xl bg-slate-100 px-3 py-2 text-slate-800">
-          <span className="block text-xs text-slate-500">Swings counted</span>
+          <span className="block text-xs text-slate-500">{t('Swings counted')}</span>
           <span className="text-xl font-bold">{swings} / 10</span>
         </div>
       </figcaption>
       <div className="mt-2 w-full max-w-[22rem] rounded-xl bg-sky-50 p-3 text-sm">
         <div className="flex justify-between font-medium">
-          <span>Speed now</span>
-          <span className="tabular-nums">{speedNow.toFixed(2)} m/s</span>
+          <span>{t('Speed now')}</span>
+          <span className="tabular-nums">{speedNow.toFixed(2)} {t('m/s')}</span>
         </div>
         <div className="mt-1 h-2.5 overflow-hidden rounded-full bg-sky-100" aria-hidden="true">
           <div className="h-full rounded-full bg-sky-500" style={{ width: `${Math.min(100, (speedNow / 1.2) * 100)}%` }} />
         </div>
         <p className="mt-1.5 text-slate-700">
-          Dashed line: the path. One full swing travels about <b>{pathCm} cm</b>, top speed <b>{topSpeed.toFixed(2)} m/s</b>.
+          <Rich text={t('Dashed line: the path. One full swing travels about <b>{path} cm</b>, top speed <b>{speed} m/s</b>.', { path: pathCm, speed: topSpeed.toFixed(2) })} />
         </p>
       </div>
     </figure>

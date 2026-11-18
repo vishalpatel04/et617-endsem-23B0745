@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { UserRound } from 'lucide-react'
 import JhoolaArt from '../components/JhoolaArt.jsx'
+import Rich from '../components/Rich.jsx'
 import { Button, Card } from '../components/ui.jsx'
 import { APP_NAME, SESSION_MINUTES, STEPS } from '../content.js'
+import { useLang } from '../lang.js'
 import { listLearners, newLearner, saveLearner } from '../storage.js'
 
 function minutes(ms) {
@@ -12,15 +14,16 @@ function minutes(ms) {
 
 // Shared tablet: each child picks their own name and continues where they stopped.
 export default function Start({ onOpen, notice }) {
+  const { t } = useLang()
   const [name, setName] = useState('')
-  const [error, setError] = useState('')
+  const [error, setError] = useState(false)
   const learners = listLearners().sort((a, b) => (b.updatedAt ?? 0) - (a.updatedAt ?? 0))
 
   const create = (event) => {
     event.preventDefault()
     const clean = name.trim()
     if (clean.length < 2) {
-      setError('Type your name (at least 2 letters).')
+      setError(true)
       return
     }
     const learner = newLearner(clean)
@@ -33,12 +36,12 @@ export default function Start({ onOpen, notice }) {
       <div className="relative overflow-hidden rounded-3xl border border-indigo-100 bg-linear-to-br from-indigo-50 via-white to-amber-50 p-5 sm:p-6">
         <JhoolaArt className="pointer-events-none absolute -right-6 -bottom-4 w-48 opacity-90 sm:w-64" />
         <div className="relative max-w-md">
-          <h1 className="text-3xl font-bold sm:text-4xl">{APP_NAME}</h1>
+          <h1 className="text-3xl font-bold sm:text-4xl">{t(APP_NAME)}</h1>
           <p className="mt-2 text-lg text-slate-700">
-            A virtual swing lab. In one {SESSION_MINUTES}-minute turn you predict, experiment with a pendulum, and check what you found.
+            {t('A virtual swing lab. In one {m}-minute turn you predict, experiment with a pendulum, and check what you found.', { m: SESSION_MINUTES })}
           </p>
           <p className="mt-3 rounded-xl bg-white/80 p-3 text-slate-800">
-            A playground jhoola with 2 m ropes takes about <b>2.8 seconds</b> for one full swing, whoever sits on it. Why? Let’s find out.
+            <Rich text={t('A playground jhoola with 2 m ropes takes about <b>2.8 seconds</b> for one full swing, whoever sits on it. Why? Let’s find out.')} />
           </p>
         </div>
       </div>
@@ -48,8 +51,8 @@ export default function Start({ onOpen, notice }) {
         </Card>
       )}
       <Card>
-        <h2 className="text-xl font-bold">Who is using the tablet now?</h2>
-        <p className="mt-1 text-slate-600">This tablet is shared. Your work is saved under your name, so you can stop and continue next time.</p>
+        <h2 className="text-xl font-bold">{t('Who is using the tablet now?')}</h2>
+        <p className="mt-1 text-slate-600">{t('This tablet is shared. Your work is saved under your name, so you can stop and continue next time.')}</p>
         {learners.length > 0 && (
           <ul className="mt-4 grid gap-2 sm:grid-cols-2">
             {learners.map((l) => {
@@ -67,7 +70,7 @@ export default function Start({ onOpen, notice }) {
                     <span className="min-w-0 flex-1">
                       <span className="block truncate font-semibold">{l.name}</span>
                       <span className="block text-sm text-slate-600">
-                        {l.completedAt ? 'Finished' : `Continue: ${step.label}`} · {minutes(l.elapsedMs)} used
+                        {l.completedAt ? t('Finished') : t('Continue: {step}', { step: t(step.label) })} · {t('{time} used', { time: minutes(l.elapsedMs) })}
                       </span>
                     </span>
                   </button>
@@ -78,7 +81,7 @@ export default function Start({ onOpen, notice }) {
         )}
         <form onSubmit={create} className="mt-5 border-t border-slate-200 pt-4">
           <label htmlFor="new-name" className="flex items-center gap-2 font-semibold">
-            <UserRound className="size-5" aria-hidden="true" /> New here? Type your name
+            <UserRound className="size-5" aria-hidden="true" /> {t('New here? Type your name')}
           </label>
           <div className="mt-2 flex flex-wrap gap-2">
             <input
@@ -86,16 +89,16 @@ export default function Start({ onOpen, notice }) {
               value={name}
               onChange={(e) => setName(e.target.value)}
               maxLength={30}
-              placeholder="Your name"
+              placeholder={t('Your name')}
               className="min-h-11 flex-1 rounded-xl border border-slate-300 px-3 text-lg"
-              aria-invalid={Boolean(error)}
+              aria-invalid={error}
               aria-describedby={error ? 'name-error' : undefined}
             />
-            <Button type="submit">Start my turn</Button>
+            <Button type="submit">{t('Start my turn')}</Button>
           </div>
           {error && (
             <p id="name-error" className="mt-2 text-sm text-rose-700">
-              {error}
+              {t('Type your name (at least 2 letters).')}
             </p>
           )}
         </form>
