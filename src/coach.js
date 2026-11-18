@@ -11,9 +11,14 @@ export function ruleBasedLabel(text) {
   const m1 = /(heav\w*|more mass|more weight|weight\w*|mass)[^.]{0,40}(fast|quick|less time|shorter|slow|more time|longer)/.test(t)
   const m2 = /(angle|push|pull\w*|further|farther|amplitude)[^.]{0,40}(long|slow|more time|fast|less time|short)/.test(t)
   const mentionsMass = /(mass|heav|weight|light|stone|bob|gram|\d\s?g\b)/.test(t)
+  // The question is a yes/no question: "yes" means a heavier bob changes the period (M1).
+  const startsYes = /^\s*(yes|yeah|yep|haan|han|ha)\b/.test(t)
+  const startsNo = /^\s*(no|nope|nahi|nahin|nai)\b/.test(t)
   if (m1 && !saysSame) return 'M1_mass'
   if (m2 && !saysSame) return 'M2_angle'
-  if (mentionsMass && saysSame) return 'correct'
+  if (startsYes && !saysSame) return 'M1_mass'
+  if ((mentionsMass || startsNo) && saysSame) return 'correct'
+  if (startsNo) return 'correct'
   return 'unclear'
 }
 

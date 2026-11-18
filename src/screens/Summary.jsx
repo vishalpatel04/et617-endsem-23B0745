@@ -1,6 +1,6 @@
 import { CircleCheck, Circle } from 'lucide-react'
 import { Button, Card } from '../components/ui.jsx'
-import { PREDICTIONS, SESSION_MINUTES } from '../content.js'
+import { PREDICTIONS, REAL_LIFE, SESSION_MINUTES } from '../content.js'
 import { logEvent } from '../storage.js'
 
 const OBSERVED = { mass: 'About the same time', angle: 'About the same time', length: 'Longer string, longer swing' }
@@ -67,6 +67,17 @@ export default function Summary({ learner, update, onStop }) {
             <li key={o.text} className="flex items-start gap-2">
               {o.done ? <CircleCheck className="mt-0.5 size-5 shrink-0 text-emerald-600" aria-label="achieved" /> : <Circle className="mt-0.5 size-5 shrink-0 text-slate-400" aria-label="not yet" />}
               <span>{o.text}</span>
+            </li>
+          ))}
+        </ul>
+      </Card>
+      <Card tone="info">
+        <h2 className="text-lg font-bold">Where you see this</h2>
+        <ul className="mt-2 grid gap-2 sm:grid-cols-3">
+          {REAL_LIFE.map((r) => (
+            <li key={r.title} className="rounded-xl bg-white p-3">
+              <p className="font-semibold">{r.title}</p>
+              <p className="mt-1 text-sm text-slate-700">{r.text}</p>
             </li>
           ))}
         </ul>

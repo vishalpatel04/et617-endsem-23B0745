@@ -120,3 +120,43 @@ export const COACH_FALLBACK = {
   M2_angle: 'Your answer is about the angle, but this question is about mass. Let’s find two trials where ONLY the mass is different. What happened to the period?',
   unclear: 'Let’s use your data. Find two trials in your table where only the mass is different, and write what happened to the period.',
 }
+
+// "Race two pendulums": side-by-side contrasting cases. Each race changes only one thing.
+export const RACES = [
+  {
+    id: 'mass',
+    label: 'Light vs heavy bob',
+    a: { length: 50, mass: 50, angle: 10 },
+    b: { length: 50, mass: 400, angle: 10 },
+    explain: 'Same string, same angle; only the mass is different. They stay side by side the whole race, so the mass does not change the period.',
+    misconception: 'M1',
+  },
+  {
+    id: 'angle',
+    label: 'Small vs big push',
+    a: { length: 50, mass: 100, angle: 5 },
+    b: { length: 50, mass: 100, angle: 20 },
+    explain: 'B travels a longer path, but it also moves faster (watch the speed). So both finish together: the starting angle does not change the period.',
+    misconception: 'M2',
+  },
+  {
+    id: 'length',
+    label: 'Short vs long string',
+    a: { length: 25, mass: 100, angle: 10 },
+    b: { length: 100, mass: 100, angle: 10 },
+    explain: 'B’s string is 4 times longer and its period is 2 times longer: A swings twice for every one swing of B.',
+    misconception: null,
+  },
+]
+
+export const RACE_GUESSES = [
+  { id: 'a', label: 'A finishes first' },
+  { id: 'b', label: 'B finishes first' },
+  { id: 'together', label: 'They finish together' },
+]
+
+export const REAL_LIFE = [
+  { title: 'Playground jhoola', text: 'A swing with longer chains swings more slowly. A heavier child and a lighter child on the same swing keep the same pace.' },
+  { title: 'Pendulum clock', text: 'Old wall clocks keep good time because the period hardly changes as the swings get smaller.' },
+  { title: 'Try it at home', text: 'Tie a small stone to a 25 cm thread and time 10 swings. You should get about 10 seconds.' },
+]

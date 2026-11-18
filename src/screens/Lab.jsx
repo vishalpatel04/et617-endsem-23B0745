@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react'
 import { CartesianGrid, ResponsiveContainer, Scatter, ScatterChart, Tooltip, XAxis, YAxis } from 'recharts'
 import { CircleCheck, Lightbulb, Lock, Play, TriangleExclamationPoint } from 'lucide-react'
 import Pendulum from '../components/Pendulum.jsx'
+import RacePendulums from '../components/RacePendulums.jsx'
 import { Button, Card, Key } from '../components/ui.jsx'
 import { MISCONCEPTION_FEEDBACK, PREDICTIONS, VARIABLES, variableById } from '../content.js'
 import { changedVariables, compareTrials, measureTenSwings, round2 } from '../physics.js'
@@ -30,6 +31,9 @@ export default function Lab({ learner, update, goTo }) {
   const [hintLevel, setHintLevel] = useState(0)
   const [helper, setHelper] = useState(null)
   const [helperFrom, setHelperFrom] = useState(null)
+  const [mode, setMode] = useState('lab')
+  const [view, setView] = useState('2d')
+  const [turn, setTurn] = useState(35)
 
   // Adaptivity (learner profile): experiments the learner predicted wrongly come first.
   const wrong = ['mass', 'angle', 'length'].filter((id) => predictionIsWrong(learner, id))
@@ -97,11 +101,74 @@ export default function Lab({ learner, update, goTo }) {
   const highlightRows =
     result?.kind === 'unfair' && hintLevel >= 2 ? [result.prev.n, result.trial.n] : []
 
+  const tabs = (
+    <div className="mb-4 flex flex-wrap gap-2" role="tablist" aria-label="Lab views">
+      {[
+        ['lab', 'My fair tests'],
+        ['race', 'Race two pendulums'],
+      ].map(([id, label]) => (
+        <button
+          key={id}
+          type="button"
+          role="tab"
+          aria-selected={mode === id}
+          disabled={running}
+          onClick={() => {
+            setMode(id)
+            logEvent(learner, 'lab_view', { view: id })
+          }}
+          className={`min-h-11 rounded-xl px-4 font-semibold ${mode === id ? 'bg-indigo-600 text-white' : 'border border-slate-300 bg-white text-slate-800 hover:bg-indigo-50'}`}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  )
+
+  if (mode === 'race') {
+    return (
+      <div>
+        {tabs}
+        <RacePendulums learner={learner} speed={speed} />
+      </div>
+    )
+  }
+
   return (
+    <div>
+    {tabs}
     <div className="grid gap-5 lg:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
       <div className="space-y-4">
         <Card>
-          <Pendulum {...settings} running={running} speed={speed} lastTime={lastTrial?.tenSwings} onDone={finish} />
+          <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex rounded-xl border border-slate-300 p-1 text-sm" role="group" aria-label="View">
+              {[
+                ['2d', '2D: measure'],
+                ['3d', '3D view'],
+              ].map(([id, label]) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => {
+                    setView(id)
+                    logEvent(learner, 'pendulum_view', { view: id })
+                  }}
+                  aria-pressed={view === id}
+                  className={`rounded-lg px-3 py-1.5 font-medium ${view === id ? 'bg-indigo-600 text-white' : 'text-slate-700'}`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            {view === '3d' && (
+              <label className="flex items-center gap-2 text-sm font-medium">
+                Turn the view
+                <input type="range" min="0" max="75" step="5" value={turn} onChange={(e) => setTurn(Number(e.target.value))} className="w-28 accent-indigo-600" aria-label="Turn the 3D view" />
+              </label>
+            )}
+          </div>
+          <Pendulum {...settings} running={running} speed={speed} lastTime={lastTrial?.tenSwings} onDone={finish} view={view} turn={turn} />
+          {view === '3d' && <p className="mt-2 text-center text-xs text-slate-500">Switch to 2D to read the ruler and protractor.</p>}
         </Card>
         <Card>
           <h2 className="text-lg font-bold">Set up your experiment</h2>
@@ -263,6 +330,7 @@ export default function Lab({ learner, update, goTo }) {
           </Button>
         </div>
       </div>
+    </div>
     </div>
   )
 }
