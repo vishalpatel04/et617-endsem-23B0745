@@ -727,4 +727,103 @@ It&#x27;s 19:32, so please go ahead with the Moodle submission.</div>
 <div class="row tool">⚙ Bash: Fix two page breaks, regenerate report PDF and page images</div>
 <div class="row tool">⚙ Read: /private/tmp/claude-501/-Users-vishalchandrapatel-Desktop-ET617/ad033cab-b892-4570-8539-58711f323dff/scratchpad/report-sheet.png</div>
 <div class="row tool">⚙ Bash: Refresh export, commit, push and confirm final state</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:42 IST</div>The final check passed, and everything is committed (`c486054`, the same on GitHub) and live.
+
+## What I checked
+
+| Area | Result |
+|---|---|
+| **Live app**, full test of both paths and every feature | ✅ 24 of 24 checks passed, zero page errors |
+| Identity token on every screen | ✅ Footer on all 8 screens, plus the About heading |
+| Correct path (Ravi) | ✅ Fair tests match his predictions, all Check tasks correct, all 3 outcomes ticked, clock stops at Wrap-up |
+| Misconception path (Sana) | ✅ Mass tested first (adaptivity); unfair test caught; 3-level hints; helper locks sliders; M1 feedback; &quot;My data changed my idea&quot;; 0.5 s feedback; &quot;yes it is&quot; flagged as M1 |
+| 3D view, race, graph switch, stop &amp; save, resume | ✅ |
+| **Repo** | ✅ Public, 18 commits from 18:27 (DESIGN.md) to 19:42, no API keys or `.env` files committed, lint and build clean |
+| **Report PDF** (17 pages) | ✅ Headings in template order: Identity card, D1–D8, AI-use log and reflection. I fixed two layout issues: the feedback table no longer splits across pages, and the near-empty page is gone |
+| **Chat files** | ✅ Export (17 pages) and summary (2 pages) are fresh; your email isn&#x27;t in them |
+
+The 2 console errors in the test are the intended &quot;AI not set up&quot; replies, which switch on the labelled offline coach.
+
+## Submit now (by 19:55)
+
+1. **Exam card:** disclose it in the Moodle Excel sheet (P5 / P5-T1 / L2 / C4 / 23B0745) and **take a screenshot**. Only you can do this.
+2. **Reflection:** read the report&#x27;s &quot;AI-use log and reflection&quot; section and keep only what&#x27;s true for you.
+3. **Upload to Moodle:**
+   - App: `https://et617-23b0745.vercel.app`
+   - Repo: `https://github.com/vishalpatel04/et617-endsem-23B0745`
+   - Report: `~/Desktop/ET617/et617-endsem-23B0745/report/ET617-EndSem-23B0745-Report.pdf`
+   - AI chat files: `report/ai-chat-export.pdf` and `report/ai-chat-summary.pdf`
+   - Your exam-card screenshot
+
+## What you need to know before the viva
+
+**The viva has three parts:** a walkthrough of both learner paths on the live app, a live change request, and one &quot;why&quot; question.
+
+**Your 30-second pitch:** &quot;My card is P5 virtual lab, the simple pendulum, an NGO learner on shared tablets, and 10-minute sessions. In Jhoola Lab, Sana predicts, runs fair tests changing length, mass and angle, and changes her idea based on her own data, all in one 10-minute turn that she can stop and resume.&quot;
+
+**Persona:** Sana, 14, Class 9, NGO centre in Mumbai, shared tablet, speaks Hindi at home. **M1:** &quot;heavier swings faster&quot;. **M2:** &quot;bigger push takes longer&quot;.
+
+**Numbers to remember:**
+- T = 2π√(L/g), valid for small angles (the app allows 5–20°).
+- 25 cm gives 1.00 s, 50 cm gives 1.42 s, 100 cm gives 2.01 s. Four times the length gives twice the period.
+- The app times 10 swings and divides by 10 to reduce reaction-time error.
+
+**Walkthrough** (use fresh names, because the examiner&#x27;s browser starts empty):
+- **Correct path:** predict &quot;same, same, more&quot; → change one thing per trial → 1.0 → pair C → an explanation that uses your numbers → three ticks.
+- **Misconception path:** predict &quot;heavier swings faster&quot; → change mass and length together → **&quot;Not a fair test yet&quot;** → hints 1–3 → &quot;Test only the mass&quot; → M1 feedback → &quot;My data changed my idea&quot; → Stop &amp; save → resume.
+
+**Design challenge** (an unsuccessful experiment, without giving the answer): the app says *what* changed, never *which variable matters*. The hints rebuild the method (choose one variable, compare the rows, use the helper). The physics is explained only after her own fair test shows it.
+
+**If asked about the AI:** the Lab coach is Claude, called through `/api/coach`. Its reply is checked for a valid JSON label, a length limit and answer give-away, and cross-checked with rules. &quot;Offline coach&quot; appears because no API key is set in Vercel. That labelled fallback is allowed by the rules and described in D6. The simulation itself uses no AI, so the data is always correct.
+
+**C4 (10-minute sessions):** countdown, per-step time budgets with move-on nudges, Stop &amp; save, name-based resume, and the clock stops at Wrap-up.
+
+**Adaptivity:** predictions set the experiment order; wrong answers trigger targeted feedback; a second unfair test jumps straight to the helper.
+
+**For the live change request:** run `git checkout -b viva` **first**, edit, then use `npm run dev` or `vercel deploy`, **never `--prod`**. Most text changes go in `src/content.js`; physics is in `src/physics.js`; the lab is in `src/screens/Lab.jsx`.
+
+The full script, answers and file guide are in **`~/Desktop/ET617/VIVA-PREP-23B0745.md`**. Open it before your slot. Good luck!</div>
+<div class="row user"><div class="who">You (student) · 18 Nov 19:43 IST</div>why the time is different?
+[1 screenshot(s) attached]</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:43 IST</div>The difference is **deliberate**. It&#x27;s a simulated **stopwatch error**, just like timing a real pendulum by hand.
+
+- The true period for a 75 cm string is T = 2π√(0.75/9.81) = **1.737 s**, so 10 swings should take **17.37 s**.
+- A real person starts and stops a stopwatch a little late or early. The app adds a small random error of up to **±0.08 s** to each 10-swing timing.
+- Your two timings, **17.30 s** and **17.38 s**, are both within that error of 17.37 s. Divided by 10, that&#x27;s **1.73 s** and **1.74 s**.
+
+**Why it&#x27;s built in (the teaching reason):**
+1. **It&#x27;s why we time 10 swings and divide by 10.** The ±0.08 s error shrinks to ±0.008 s per swing, the method from the Start screen.
+2. **It teaches that tiny differences aren&#x27;t real effects.** Any change smaller than 0.03 s is labelled *&quot;about the same (the difference is smaller than stopwatch error)&quot;*. So when the mass changes and the period moves from 1.42 to 1.43 s, Sana learns that mass made no real difference.
+3. **Repeating a trial checks your timing.** The app says exactly that when the settings are unchanged.
+
+**If asked in the viva:** &quot;The variation is intentional. Real measurements always vary a little, so the app adds a small stopwatch error. Learners see why we time 10 swings, and they learn not to read a 0.01-second difference as a real effect.&quot;
+
+**If the examiner asks you to remove it** (a likely live change): on the `viva` branch, change `0.16` to `0` in `measureTenSwings` in `src/physics.js`. Every repeat trial then gives exactly the same time.
+
+It&#x27;s 19:44, so please submit on Moodle now.</div>
+<div class="row user"><div class="who">You (student) · 18 Nov 19:48 IST</div>Copy paste entire chat logs in .txt file and submit here (no other file format will be accepted)</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:49 IST</div>I&#x27;ll create a plain-text (.txt) log of this entire chat, in order: every message from you and from Claude, with each tool action listed on one line. System notes are stripped out and your email address is removed.</div>
+<div class="row tool">⚙ Bash: Export the full chat log to a plain .txt file</div>
+<div class="row tool">⚙ Bash: Commit the .txt chat log and show it in Finder</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:49 IST</div>The full chat log is ready as a plain .txt file. I&#x27;ve highlighted it in Finder so you can drag it straight into Moodle.
+
+**Upload this file:** `~/Desktop/ET617/ET617-23B0745-AI-chat-log.txt`
+
+- It covers the whole chat in order, from exam prep (18 Nov, 00:37) through the exam to your latest message: 20 messages from you, 87 from Claude, and 182 tool actions listed one per line.
+- System notes are stripped out and your email is removed.
+- It&#x27;s UTF-8 text, 79 KB, 1,030 lines. A copy is also in the repo at `report/ET617-23B0745-AI-chat-log.txt` (commit `5ea6966`).
+- It doesn&#x27;t include this final reply, which was written after the export.
+
+**It&#x27;s 19:49, so submit everything now:**
+1. `ET617-23B0745-AI-chat-log.txt` (this file)
+2. Report: `~/Desktop/ET617/et617-endsem-23B0745/report/ET617-EndSem-23B0745-Report.pdf`
+3. Live app URL: `https://et617-23b0745.vercel.app`
+4. Repo link: `https://github.com/vishalpatel04/et617-endsem-23B0745`
+5. Your exam-card screenshot
+
+Good luck in the viva!</div>
+<div class="row user"><div class="who">You (student) · 18 Nov 19:51 IST</div>&lt;ide_opened_file&gt;The user opened the file /Users/vishalchandrapatel/Desktop/ET617/et617-endsem-23B0745/report/ET617-23B0745-AI-chat-log.txt in the IDE. This may or may not be related to the current task.&lt;/ide_opened_file&gt;
+do change in the github also</div>
+<div class="row ai"><div class="who">Claude (AI) · 18 Nov 19:51 IST</div>I&#x27;ll check whether you changed anything locally, refresh the chat log so it includes everything up to now, and push it all to GitHub.</div>
+<div class="row tool">⚙ Bash: Refresh chat log, commit, push and verify on GitHub</div>
 </body></html>
