@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { UserRound } from 'lucide-react'
+import JhoolaArt from '../components/JhoolaArt.jsx'
 import { Button, Card } from '../components/ui.jsx'
 import { APP_NAME, SESSION_MINUTES, STEPS } from '../content.js'
 import { listLearners, newLearner, saveLearner } from '../storage.js'
@@ -29,11 +30,17 @@ export default function Start({ onOpen, notice }) {
 
   return (
     <div className="mx-auto max-w-3xl space-y-5">
-      <div>
-        <h1 className="text-3xl font-bold sm:text-4xl">{APP_NAME}</h1>
-        <p className="mt-2 text-lg text-slate-700">
-          A virtual swing lab. In one {SESSION_MINUTES}-minute turn you predict, experiment with a pendulum, and check what you found.
-        </p>
+      <div className="relative overflow-hidden rounded-3xl border border-indigo-100 bg-linear-to-br from-indigo-50 via-white to-amber-50 p-5 sm:p-6">
+        <JhoolaArt className="pointer-events-none absolute -right-6 -bottom-4 w-48 opacity-90 sm:w-64" />
+        <div className="relative max-w-md">
+          <h1 className="text-3xl font-bold sm:text-4xl">{APP_NAME}</h1>
+          <p className="mt-2 text-lg text-slate-700">
+            A virtual swing lab. In one {SESSION_MINUTES}-minute turn you predict, experiment with a pendulum, and check what you found.
+          </p>
+          <p className="mt-3 rounded-xl bg-white/80 p-3 text-slate-800">
+            A playground jhoola with 2 m ropes takes about <b>2.8 seconds</b> for one full swing, whoever sits on it. Why? Let’s find out.
+          </p>
+        </div>
       </div>
       {notice && (
         <Card tone="good" role="status">

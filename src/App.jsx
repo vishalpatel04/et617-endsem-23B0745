@@ -38,13 +38,21 @@ export default function App() {
   // Session clock for constraint C4: counts only while this learner's turn is open and visible.
   const learnerId = learner?.id
   const finished = Boolean(learner?.completedAt)
+  // The learning sequence ends at Wrap-up, so the clock stops there.
+  const clockStopped = finished || learner?.step === 'summary'
   useEffect(() => {
-    if (view !== 'learn' || !learnerId || finished) return undefined
+    if (view !== 'learn' || !learnerId || clockStopped) return undefined
     const timer = setInterval(() => {
-      if (document.visibilityState === 'visible') update((l) => ({ ...l, elapsedMs: (l.elapsedMs ?? 0) + 1000 }))
+      if (document.visibilityState === 'visible') {
+        update((l) => ({
+          ...l,
+          elapsedMs: (l.elapsedMs ?? 0) + 1000,
+          stepMs: { ...l.stepMs, [l.step]: (l.stepMs?.[l.step] ?? 0) + 1000 },
+        }))
+      }
     }, 1000)
     return () => clearInterval(timer)
-  }, [view, learnerId, finished, update])
+  }, [view, learnerId, clockStopped, update])
 
   const open = (picked, isNew) => {
     setLearner(picked)
@@ -86,8 +94,19 @@ export default function App() {
     window.scrollTo(0, 0)
   }
 
-  const timeUp = learner && !finished && learner.elapsedMs >= SESSION_MS && !extraTime
+  const timeUp = learner && !clockStopped && learner.elapsedMs >= SESSION_MS && !extraTime
   const stepIndex = learner ? STEPS.findIndex((s) => s.id === learner.step) : -1
+  // Pacing for C4: every step has a time budget from the 10-minute plan.
+  const stepInfo = stepIndex >= 0 ? STEPS[stepIndex] : null
+  const nextStep = stepIndex >= 0 ? STEPS[stepIndex + 1] : null
+  const stepBudgetMs = stepInfo ? stepInfo.minutes * 60000 + (learner.stepExtra?.[learner.step] ?? 0) : 0
+  const stepUsedMs = learner?.stepMs?.[learner?.step] ?? 0
+  const stepOver = Boolean(learner && stepInfo && !clockStopped && !timeUp && stepUsedMs >= stepBudgetMs)
+  const timeLeft = learner ? SESSION_MS - learner.elapsedMs : 0
+  const moreTime = () => {
+    update((l) => ({ ...l, stepExtra: { ...l.stepExtra, [l.step]: (l.stepExtra?.[l.step] ?? 0) + 60000 } }))
+    logEvent(learner, 'step_more_time', { step: learner.step })
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
@@ -120,10 +139,15 @@ export default function App() {
                 </ol>
               </nav>
               <div className="ml-auto flex items-center gap-3">
-                <div className="text-right" aria-label={`Session time ${clock(learner.elapsedMs)} of ${SESSION_MINUTES} minutes`}>
-                  <span className={`flex items-center gap-1 font-mono text-lg font-bold ${learner.elapsedMs >= SESSION_MS ? 'text-amber-600' : ''}`}>
+                <div className="text-right" aria-label={clockStopped ? `Finished in ${clock(learner.elapsedMs)}` : `${clock(Math.max(0, timeLeft))} left of ${SESSION_MINUTES} minutes`}>
+                  <span className={`flex items-center justify-end gap-1 font-mono text-lg font-bold ${timeLeft < 0 && !clockStopped ? 'text-amber-600' : clockStopped ? 'text-emerald-700' : ''}`}>
                     <Timer className="size-5" aria-hidden="true" />
-                    {clock(learner.elapsedMs)} / {SESSION_MINUTES}:00
+                    {clockStopped ? `Done in ${clock(learner.elapsedMs)}` : timeLeft >= 0 ? `${clock(timeLeft)} left` : `${clock(-timeLeft)} over`}
+                  </span>
+                  <span className="block text-xs text-slate-600">
+                    {clockStopped
+                      ? 'Clock stopped'
+                      : `${stepInfo.label}: ${clock(Math.max(0, stepBudgetMs - stepUsedMs))} of ${Math.round(stepBudgetMs / 6000) / 10} min left`}
                   </span>
                   <span className="mt-0.5 block h-1.5 w-32 overflow-hidden rounded-full bg-slate-200">
                     <span
@@ -155,6 +179,22 @@ export default function App() {
         </div>
       )}
 
+      {stepOver && (
+        <div className="border-b border-indigo-200 bg-indigo-50" role="status">
+          <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-4 py-3">
+            <p className="flex-1 font-medium">
+              {learner.step === 'predict'
+                ? 'Your planned time for Predict is used. First ideas are fine: choose quickly and save them.'
+                : `You planned ${stepInfo.minutes} min for “${stepInfo.label}”. Move on to “${nextStep.label}” so you finish in ${SESSION_MINUTES} minutes.`}
+            </p>
+            {learner.step !== 'predict' && nextStep && <Button onClick={() => goTo(nextStep.id)}>Go to {nextStep.label}</Button>}
+            <Button variant="ghost" onClick={moreTime}>
+              1 more minute
+            </Button>
+          </div>
+        </div>
+      )}
+
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6">
         {view === 'learn' && resumed && notice && (
           <div className="mb-5 flex flex-wrap items-center gap-3 rounded-2xl border border-emerald-300 bg-emerald-50 p-4" role="status">
@@ -170,7 +210,7 @@ export default function App() {
         {view === 'learn' && learner && learner.step === 'predict' && <Predict learner={learner} update={update} goTo={goTo} />}
         {view === 'learn' && learner && learner.step === 'lab' && <Lab learner={learner} update={update} goTo={goTo} />}
         {view === 'learn' && learner && learner.step === 'check' && <Check learner={learner} update={update} goTo={goTo} />}
-        {view === 'learn' && learner && learner.step === 'summary' && <Summary learner={learner} update={update} onStop={stop} />}
+        {view === 'learn' && learner && learner.step === 'summary' && <Summary learner={learner} update={update} onStop={stop} goTo={goTo} />}
       </main>
 
       <footer className="border-t border-slate-200 bg-white">

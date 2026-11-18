@@ -10,13 +10,38 @@ function clock(ms) {
   return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`
 }
 
-export default function Summary({ learner, update, onStop }) {
+export default function Summary({ learner, update, onStop, goTo }) {
   const fair = learner.fairTests ?? {}
   const answers = learner.answers ?? {}
+  const fairCount = ['mass', 'angle', 'length'].filter((id) => fair[id]).length
+  const predicted = PREDICTIONS.every((p) => learner.predictions?.[p.id])
+  const numericRight = answers.numeric?.verdict === 'correct'
+  const explainRight = answers.explanation?.label === 'correct'
+  // Each tick needs evidence; when it is missing we say exactly what to do and where.
   const outcomes = [
-    { text: 'Predict and check how length, mass and angle change the period', done: PREDICTIONS.every((p) => learner.predictions?.[p.id]) && ['mass', 'angle', 'length'].every((id) => fair[id]) },
-    { text: 'Design a fair test that changes only one thing', done: Object.keys(fair).length >= 2 && answers.fairPair?.correct },
-    { text: 'Explain with data, and calculate the period for a 4× shorter string', done: answers.numeric?.verdict === 'correct' && answers.explanation?.label === 'correct' },
+    {
+      text: 'Predict and check how length, mass and angle change the period',
+      done: predicted && fairCount === 3,
+      todo: predicted ? `Finish one fair test each for mass, angle and length (${fairCount} of 3 done).` : 'Make all three predictions first.',
+      step: predicted ? 'lab' : 'predict',
+      action: predicted ? 'Open the lab' : 'Open Predict',
+    },
+    {
+      text: 'Design a fair test that changes only one thing',
+      done: fairCount >= 2 && Boolean(answers.fairPair?.correct),
+      todo: fairCount < 2 ? `Finish at least 2 fair tests in the lab (${fairCount} done).` : 'Check Task 2 is not right yet: find the pair where only ONE thing changes.',
+      step: fairCount < 2 ? 'lab' : 'check',
+      action: fairCount < 2 ? 'Open the lab' : 'Open Check',
+    },
+    {
+      text: 'Explain with data, and calculate the period for a 4× shorter string',
+      done: numericRight && explainRight,
+      todo: [!numericRight && 'Check Task 1 is not right yet: compare your 100 cm and 25 cm trials.', !explainRight && 'Check Task 3: explain using numbers from two trials where only the mass changed.']
+        .filter(Boolean)
+        .join(' '),
+      step: 'check',
+      action: 'Open Check',
+    },
   ]
 
   const finish = () => {
@@ -66,7 +91,17 @@ export default function Summary({ learner, update, onStop }) {
           {outcomes.map((o) => (
             <li key={o.text} className="flex items-start gap-2">
               {o.done ? <CircleCheck className="mt-0.5 size-5 shrink-0 text-emerald-600" aria-label="achieved" /> : <Circle className="mt-0.5 size-5 shrink-0 text-slate-400" aria-label="not yet" />}
-              <span>{o.text}</span>
+              <span>
+                {o.text}
+                {!o.done && (
+                  <span className="mt-1 block rounded-lg bg-amber-50 p-2 text-sm text-slate-700">
+                    To tick this: {o.todo}{' '}
+                    <button type="button" className="font-semibold text-indigo-700 underline" onClick={() => goTo(o.step)}>
+                      {o.action}
+                    </button>
+                  </span>
+                )}
+              </span>
             </li>
           ))}
         </ul>

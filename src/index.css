@@ -12,3 +12,17 @@ body {
   outline: 3px solid #4f46e5;
   outline-offset: 2px;
 }
+
+/* Start-screen jhoola: a 2 m swing has a period of about 2.8 s, so each half swing takes 1.4 s. */
+@keyframes jhoola {
+  from { transform: rotate(14deg); }
+  to { transform: rotate(-14deg); }
+}
+.jhoola-swing {
+  transform-box: view-box;
+  transform-origin: 155px 22px;
+  animation: jhoola 1.4s ease-in-out infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .jhoola-swing { animation: none; }
+}
